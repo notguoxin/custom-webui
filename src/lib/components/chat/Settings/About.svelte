@@ -112,29 +112,6 @@
 			<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a>.
 		</div>
 
-		<div class="flex space-x-1">
-			<a href="https://discord.gg/5rJgQTnV4s" target="_blank">
-				<img
-					alt="Discord"
-					src="https://img.shields.io/badge/Discord-Open_WebUI-blue?logo=discord&logoColor=white"
-				/>
-			</a>
-
-			<a href="https://twitter.com/OpenWebUI" target="_blank">
-				<img
-					alt="X (formerly Twitter) Follow"
-					src="https://img.shields.io/twitter/follow/OpenWebUI"
-				/>
-			</a>
-
-			<a href="https://github.com/notguoxin/open-webui" target="_blank">
-				<img
-					alt="Github Repo"
-					src="https://img.shields.io/github/stars/open-webui/open-webui?style=social&label=Star us on Github"
-				/>
-			</a>
-		</div>
-
 		<div class="mt-2 text-xs text-gray-400 dark:text-gray-500">
 			{#if !$WEBUI_NAME.includes('Open WebUI')}
 				<span class=" text-gray-500 dark:text-gray-300 font-medium">{$WEBUI_NAME}</span> -

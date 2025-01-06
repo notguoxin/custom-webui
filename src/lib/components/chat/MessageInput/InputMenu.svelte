@@ -24,10 +24,6 @@
 	export let onClose: Function;
 
 	let show = false;
-
-	$: if (show) {
-		init();
-	}
 </script>
 
 <Dropdown
