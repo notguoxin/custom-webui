@@ -6,7 +6,6 @@ from aiocache import cached
 from fastapi import Request
 
 from open_webui.routers import ollama
-from open_webui.functions import get_function_models
 
 
 from open_webui.models.functions import Functions

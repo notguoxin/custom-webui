@@ -18,7 +18,6 @@ from open_webui.socket.main import (
     get_event_call,
     get_event_emitter,
 )
-from open_webui.functions import generate_function_chat_completion
 
 from open_webui.models.functions import Functions
 from open_webui.models.models import Models
@@ -111,11 +110,6 @@ async def generate_chat_completion(
                 "selected_model_id": selected_model_id,
             }
 
-    if model.get("pipe"):
-        # Below does not require bypass_filter because this is the only route the uses this function and it is already bypassing the filter
-        return await generate_function_chat_completion(
-            request, form_data, user=user, models=models
-        )
     if model["owned_by"] == "ollama":
         # Using /ollama/api/chat endpoint
         form_data = convert_payload_openai_to_ollama(form_data)

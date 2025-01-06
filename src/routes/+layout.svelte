@@ -220,7 +220,6 @@
 						$socket.emit('user-join', { auth: { token: sessionUser.token } });
 
 						$socket?.on('chat-events', chatEventHandler);
-						$socket?.on('channel-events', channelEventHandler);
 
 						await user.set(sessionUser);
 						await config.set(await getBackendConfig());

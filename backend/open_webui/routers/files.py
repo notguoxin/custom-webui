@@ -15,7 +15,6 @@ from open_webui.models.files import (
     FileModelResponse,
     Files,
 )
-from open_webui.routers.retrieval import process_file, ProcessFileForm
 
 from open_webui.config import UPLOAD_DIR
 from open_webui.env import SRC_LOG_LEVELS
@@ -71,7 +70,6 @@ def upload_file(
         )
 
         try:
-            process_file(request, ProcessFileForm(file_id=id))
             file_item = Files.get_file_by_id(id=id)
         except Exception as e:
             log.exception(e)
@@ -192,9 +190,6 @@ async def update_file_data_content_by_id(
 
     if file and (file.user_id == user.id or user.role == "admin"):
         try:
-            process_file(
-                request, ProcessFileForm(file_id=id, content=form_data.content)
-            )
             file = Files.get_file_by_id(id=id)
         except Exception as e:
             log.exception(e)

@@ -30,7 +30,6 @@ from open_webui.routers.tasks import (
     generate_title,
     generate_chat_tags,
 )
-from open_webui.routers.retrieval import process_web_search, SearchForm
 from open_webui.utils.webhook import post_webhook
 
 
