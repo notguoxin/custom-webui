@@ -35,6 +35,7 @@
 		showOverview,
 		chatTitle,
 		showArtifacts,
+		tools
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -58,7 +59,9 @@
 		getTagsById,
 		updateChatById
 	} from '$lib/apis/chats';
+	import { generateOpenAIChatCompletion } from '$lib/apis/openai';
 	import { processWeb, processWebSearch, processYoutubeVideo } from '$lib/apis/retrieval';
+	import { createOpenAITextStream } from '$lib/apis/streaming';
 	import { queryMemory } from '$lib/apis/memories';
 	import { getAndUpdateUserLocation, getUserSettings } from '$lib/apis/users';
 	import {
@@ -106,6 +109,7 @@
 	let selectedModelIds = [];
 	$: selectedModelIds = atSelectedModel !== undefined ? [atSelectedModel.id] : selectedModels;
 
+	let selectedToolIds = [];
 	let webSearchEnabled = false;
 
 	let chat = null;
@@ -130,6 +134,7 @@
 
 			prompt = '';
 			files = [];
+			selectedToolIds = [];
 			webSearchEnabled = false;
 
 			loaded = false;
@@ -144,6 +149,7 @@
 
 						prompt = input.prompt;
 						files = input.files;
+						selectedToolIds = input.selectedToolIds;
 						webSearchEnabled = input.webSearchEnabled;
 					} catch (e) {}
 				}
@@ -167,6 +173,26 @@
 		}
 		sessionStorage.selectedModels = JSON.stringify(selectedModels);
 		console.log('saveSessionSelectedModels', selectedModels, sessionStorage.selectedModels);
+	};
+
+	$: if (selectedModels) {
+		setToolIds();
+	}
+
+	const setToolIds = async () => {
+		if (!$tools) {
+			tools.set(await getTools(localStorage.token));
+		}
+
+		if (selectedModels.length !== 1) {
+			return;
+		}
+		const model = $models.find((m) => m.id === selectedModels[0]);
+		if (model) {
+			selectedToolIds = (model?.info?.meta?.toolIds ?? []).filter((id) =>
+				$tools.find((t) => t.id === id)
+			);
+		}
 	};
 
 	const showMessage = async (message) => {
@@ -361,10 +387,12 @@
 				const input = JSON.parse(localStorage.getItem(`chat-input-${chatIdProp}`));
 				prompt = input.prompt;
 				files = input.files;
+				selectedToolIds = input.selectedToolIds;
 				webSearchEnabled = input.webSearchEnabled;
 			} catch (e) {
 				prompt = '';
 				files = [];
+				selectedToolIds = [];
 				webSearchEnabled = false;
 			}
 		}
@@ -666,6 +694,20 @@
 		}
 		if ($page.url.searchParams.get('web-search') === 'true') {
 			webSearchEnabled = true;
+		}
+
+		if ($page.url.searchParams.get('tools')) {
+			selectedToolIds = $page.url.searchParams
+				.get('tools')
+				?.split(',')
+				.map((id) => id.trim())
+				.filter((id) => id);
+		} else if ($page.url.searchParams.get('tool-ids')) {
+			selectedToolIds = $page.url.searchParams
+				.get('tool-ids')
+				?.split(',')
+				.map((id) => id.trim())
+				.filter((id) => id);
 		}
 
 		if ($page.url.searchParams.get('call') === 'true') {
@@ -1012,6 +1054,10 @@
 	const chatCompletionEventHandler = async (data, message, chatId) => {
 		const { id, done, choices, content, sources, selected_model_id, error, usage } = data;
 
+		if (error) {
+			await handleOpenAIError(error, message);
+		}
+
 		if (sources) {
 			message.sources = sources;
 		}
@@ -1034,7 +1080,8 @@
 
 					// Emit chat event for TTS
 					const messageContentParts = getMessageContentParts(
-						message.content
+						message.content,
+						$config?.audio?.tts?.split_on ?? 'punctuation'
 					);
 					messageContentParts.pop();
 
@@ -1457,9 +1504,117 @@
 							content: message?.merged?.content ?? message.content
 						})
 			}));
-			
+
+		const res = await generateOpenAIChatCompletion(
+			localStorage.token,
+			{
+				stream: stream,
+				model: model.id,
+				messages: messages,
+				params: {
+					...$settings?.params,
+					...params,
+
+					format: $settings.requestFormat ?? undefined,
+					keep_alive: $settings.keepAlive ?? undefined,
+					stop:
+						(params?.stop ?? $settings?.params?.stop ?? undefined)
+							? (params?.stop.split(',').map((token) => token.trim()) ?? $settings.params.stop).map(
+									(str) => decodeURIComponent(JSON.parse('"' + str.replace(/\"/g, '\\"') + '"'))
+								)
+							: undefined
+				},
+
+				files: files.length > 0 ? files : undefined,
+				tool_ids: selectedToolIds.length > 0 ? selectedToolIds : undefined,
+				features: {
+					web_search: webSearchEnabled
+				},
+
+				session_id: $socket?.id,
+				chat_id: $chatId,
+				id: responseMessageId,
+
+				...(!$temporaryChatEnabled &&
+				(messages.length == 1 ||
+					(messages.length == 2 &&
+						messages.at(0)?.role === 'system' &&
+						messages.at(1)?.role === 'user')) &&
+				selectedModels[0] === model.id
+					? {
+							background_tasks: {
+								title_generation: $settings?.title?.auto ?? true,
+								tags_generation: $settings?.autoTags ?? true
+							}
+						}
+					: {}),
+
+				...(stream && (model.info?.meta?.capabilities?.usage ?? false)
+					? {
+							stream_options: {
+								include_usage: true
+							}
+						}
+					: {})
+			},
+			`${WEBUI_BASE_URL}/api`
+		).catch((error) => {
+			console.log(error);
+			responseMessage.error = {
+				content: error
+			};
+			responseMessage.done = true;
+			history.messages[responseMessageId] = responseMessage;
+			return null;
+		});
+
+		console.log(res);
+
+		if (res) {
+			taskId = res.task_id;
+		}
+
 		await tick();
 		scrollToBottom();
+	};
+
+	const handleOpenAIError = async (error, responseMessage) => {
+		let errorMessage = '';
+		let innerError;
+
+		if (error) {
+			innerError = error;
+		}
+
+		console.error(innerError);
+		if ('detail' in innerError) {
+			toast.error(innerError.detail);
+			errorMessage = innerError.detail;
+		} else if ('error' in innerError) {
+			if ('message' in innerError.error) {
+				toast.error(innerError.error.message);
+				errorMessage = innerError.error.message;
+			} else {
+				toast.error(innerError.error);
+				errorMessage = innerError.error;
+			}
+		} else if ('message' in innerError) {
+			toast.error(innerError.message);
+			errorMessage = innerError.message;
+		}
+
+		responseMessage.error = {
+			content: $i18n.t(`Uh-oh! There was an issue with the response.`) + '\n' + errorMessage
+		};
+		responseMessage.done = true;
+
+		if (responseMessage.statusHistory) {
+			responseMessage.statusHistory = responseMessage.statusHistory.filter(
+				(status) => status.action !== 'knowledge_search'
+			);
+		}
+
+		history.messages[responseMessage.id] = responseMessage;
 	};
 
 	const stopResponse = () => {
@@ -1772,9 +1927,7 @@
 								{history}
 								{selectedModels}
 								bind:files
-								bind:prompt
 								bind:autoScroll
-								bind:webSearchEnabled
 								bind:atSelectedModel
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
 								{stopResponse}
@@ -1823,7 +1976,7 @@
 								bind:files
 								bind:prompt
 								bind:autoScroll
-								bind:webSearchEnabled
+								bind:selectedToolIds
 								bind:atSelectedModel
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
 								{stopResponse}
