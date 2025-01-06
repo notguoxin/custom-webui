@@ -34,8 +34,7 @@
 		mobile,
 		showOverview,
 		chatTitle,
-		showArtifacts,
-		tools
+		showArtifacts
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -173,26 +172,6 @@
 		}
 		sessionStorage.selectedModels = JSON.stringify(selectedModels);
 		console.log('saveSessionSelectedModels', selectedModels, sessionStorage.selectedModels);
-	};
-
-	$: if (selectedModels) {
-		setToolIds();
-	}
-
-	const setToolIds = async () => {
-		if (!$tools) {
-			tools.set(await getTools(localStorage.token));
-		}
-
-		if (selectedModels.length !== 1) {
-			return;
-		}
-		const model = $models.find((m) => m.id === selectedModels[0]);
-		if (model) {
-			selectedToolIds = (model?.info?.meta?.toolIds ?? []).filter((id) =>
-				$tools.find((t) => t.id === id)
-			);
-		}
 	};
 
 	const showMessage = async (message) => {
@@ -695,21 +674,7 @@
 		if ($page.url.searchParams.get('web-search') === 'true') {
 			webSearchEnabled = true;
 		}
-
-		if ($page.url.searchParams.get('tools')) {
-			selectedToolIds = $page.url.searchParams
-				.get('tools')
-				?.split(',')
-				.map((id) => id.trim())
-				.filter((id) => id);
-		} else if ($page.url.searchParams.get('tool-ids')) {
-			selectedToolIds = $page.url.searchParams
-				.get('tool-ids')
-				?.split(',')
-				.map((id) => id.trim())
-				.filter((id) => id);
-		}
-
+		
 		if ($page.url.searchParams.get('call') === 'true') {
 			showCallOverlay.set(true);
 			showControls.set(true);
