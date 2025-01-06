@@ -148,7 +148,6 @@
 
 						prompt = input.prompt;
 						files = input.files;
-						selectedToolIds = input.selectedToolIds;
 						webSearchEnabled = input.webSearchEnabled;
 					} catch (e) {}
 				}
@@ -366,7 +365,6 @@
 				const input = JSON.parse(localStorage.getItem(`chat-input-${chatIdProp}`));
 				prompt = input.prompt;
 				files = input.files;
-				selectedToolIds = input.selectedToolIds;
 				webSearchEnabled = input.webSearchEnabled;
 			} catch (e) {
 				prompt = '';
@@ -1491,7 +1489,6 @@
 				},
 
 				files: files.length > 0 ? files : undefined,
-				tool_ids: selectedToolIds.length > 0 ? selectedToolIds : undefined,
 				features: {
 					web_search: webSearchEnabled
 				},
@@ -1941,7 +1938,6 @@
 								bind:files
 								bind:prompt
 								bind:autoScroll
-								bind:selectedToolIds
 								bind:atSelectedModel
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
 								{stopResponse}
