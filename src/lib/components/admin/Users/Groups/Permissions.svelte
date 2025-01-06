@@ -131,41 +131,42 @@
 			<Switch bind:state={permissions.workspace.models} />
 		</div>
 
-	<hr class=" border-gray-50 dark:border-gray-850 my-2" />
+		<hr class=" border-gray-50 dark:border-gray-850 my-2" />
 
-	<div>
-		<div class=" mb-2 text-sm font-medium">{$i18n.t('Chat Permissions')}</div>
+		<div>
+			<div class=" mb-2 text-sm font-medium">{$i18n.t('Chat Permissions')}</div>
 
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Allow File Upload')}
+			<div class="  flex w-full justify-between my-2 pr-2">
+				<div class=" self-center text-xs font-medium">
+					{$i18n.t('Allow File Upload')}
+				</div>
+
+				<Switch bind:state={permissions.chat.file_upload} />
 			</div>
 
-			<Switch bind:state={permissions.chat.file_upload} />
-		</div>
+			<div class="  flex w-full justify-between my-2 pr-2">
+				<div class=" self-center text-xs font-medium">
+					{$i18n.t('Allow Chat Delete')}
+				</div>
 
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Allow Chat Delete')}
+				<Switch bind:state={permissions.chat.delete} />
 			</div>
 
-			<Switch bind:state={permissions.chat.delete} />
-		</div>
+			<div class="  flex w-full justify-between my-2 pr-2">
+				<div class=" self-center text-xs font-medium">
+					{$i18n.t('Allow Chat Edit')}
+				</div>
 
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Allow Chat Edit')}
+				<Switch bind:state={permissions.chat.edit} />
 			</div>
 
-			<Switch bind:state={permissions.chat.edit} />
-		</div>
+			<div class="  flex w-full justify-between my-2 pr-2">
+				<div class=" self-center text-xs font-medium">
+					{$i18n.t('Allow Temporary Chat')}
+				</div>
 
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Allow Temporary Chat')}
+				<Switch bind:state={permissions.chat.temporary} />
 			</div>
-
-			<Switch bind:state={permissions.chat.temporary} />
 		</div>
 	</div>
 </div>
