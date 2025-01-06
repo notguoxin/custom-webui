@@ -37,11 +37,8 @@ from open_webui.utils.misc import (
     add_or_update_system_message,
     get_last_user_message,
     prepend_to_first_user_message_content,
-    openai_chat_chunk_message_template,
-    openai_chat_completion_message_template,
 )
 from open_webui.utils.payload import (
-    apply_model_params_to_body_openai,
     apply_model_system_prompt_to_body,
 )
 
@@ -64,71 +61,6 @@ def get_function_module_by_id(request: Request, pipe_id: str):
         function_module.valves = function_module.Valves(**(valves if valves else {}))
     return function_module
 
-
-async def get_function_models(request):
-    pipes = Functions.get_functions_by_type("pipe", active_only=True)
-    pipe_models = []
-
-    for pipe in pipes:
-        function_module = get_function_module_by_id(request, pipe.id)
-
-        # Check if function is a manifold
-        if hasattr(function_module, "pipes"):
-            sub_pipes = []
-
-            # Check if pipes is a function or a list
-
-            try:
-                if callable(function_module.pipes):
-                    sub_pipes = function_module.pipes()
-                else:
-                    sub_pipes = function_module.pipes
-            except Exception as e:
-                log.exception(e)
-                sub_pipes = []
-
-            log.debug(
-                f"get_function_models: function '{pipe.id}' is a manifold of {sub_pipes}"
-            )
-
-            for p in sub_pipes:
-                sub_pipe_id = f'{pipe.id}.{p["id"]}'
-                sub_pipe_name = p["name"]
-
-                if hasattr(function_module, "name"):
-                    sub_pipe_name = f"{function_module.name}{sub_pipe_name}"
-
-                pipe_flag = {"type": pipe.type}
-
-                pipe_models.append(
-                    {
-                        "id": sub_pipe_id,
-                        "name": sub_pipe_name,
-                        "object": "model",
-                        "created": pipe.created_at,
-                        "owned_by": "openai",
-                        "pipe": pipe_flag,
-                    }
-                )
-        else:
-            pipe_flag = {"type": "pipe"}
-
-            log.debug(
-                f"get_function_models: function '{pipe.id}' is a single pipe {{ 'id': {pipe.id}, 'name': {pipe.name} }}"
-            )
-
-            pipe_models.append(
-                {
-                    "id": pipe.id,
-                    "name": pipe.name,
-                    "object": "model",
-                    "created": pipe.created_at,
-                    "owned_by": "openai",
-                    "pipe": pipe_flag,
-                }
-            )
-
-    return pipe_models
 
 
 async def generate_function_chat_completion(
@@ -163,7 +95,6 @@ async def generate_function_chat_completion(
         if line.startswith("data:"):
             return f"{line}\n\n"
         else:
-            line = openai_chat_chunk_message_template(form_data["model"], line)
             return f"data: {json.dumps(line)}\n\n"
 
     def get_pipe_id(form_data: dict) -> str:
@@ -249,7 +180,6 @@ async def generate_function_chat_completion(
             form_data["model"] = model_info.base_model_id
 
         params = model_info.params.model_dump()
-        form_data = apply_model_params_to_body_openai(params, form_data)
         form_data = apply_model_system_prompt_to_body(params, form_data, user)
 
     pipe_id = get_pipe_id(form_data)
@@ -279,7 +209,7 @@ async def generate_function_chat_completion(
                 return
 
             if isinstance(res, str):
-                message = openai_chat_chunk_message_template(form_data["model"], res)
+                message = (form_data["model"], res)
                 yield f"data: {json.dumps(message)}\n\n"
 
             if isinstance(res, Iterator):
@@ -291,7 +221,7 @@ async def generate_function_chat_completion(
                     yield process_line(form_data, line)
 
             if isinstance(res, str) or isinstance(res, Generator):
-                finish_message = openai_chat_chunk_message_template(
+                finish_message = (
                     form_data["model"], ""
                 )
                 finish_message["choices"][0]["finish_reason"] = "stop"
@@ -313,4 +243,4 @@ async def generate_function_chat_completion(
             return res.model_dump()
 
         message = await get_message_content(res)
-        return openai_chat_completion_message_template(form_data["model"], message)
+        return (form_data["model"], message)

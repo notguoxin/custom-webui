@@ -33,7 +33,6 @@ argon2-cffi==23.1.0
 APScheduler==3.10.4
 
 # AI libraries
-openai
 anthropic
 google-generativeai==0.7.2
 tiktoken

@@ -248,7 +248,7 @@ def get_embedding_function(
 ):
     if embedding_engine == "":
         return lambda query: embedding_function.encode(query).tolist()
-    elif embedding_engine in ["ollama", "openai"]:
+    elif embedding_engine in ["ollama"]:
         func = lambda query: generate_embeddings(
             engine=embedding_engine,
             model=embedding_model,
@@ -409,30 +409,6 @@ def get_model_path(model: str, update_model: bool = False):
         log.exception(f"Cannot determine model snapshot path: {e}")
         return model
 
-
-def generate_openai_batch_embeddings(
-    model: str, texts: list[str], url: str = "https://api.openai.com/v1", key: str = ""
-) -> Optional[list[list[float]]]:
-    try:
-        r = requests.post(
-            f"{url}/embeddings",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {key}",
-            },
-            json={"input": texts, "model": model},
-        )
-        r.raise_for_status()
-        data = r.json()
-        if "data" in data:
-            return [elem["embedding"] for elem in data["data"]]
-        else:
-            raise "Something went wrong :/"
-    except Exception as e:
-        print(e)
-        return None
-
-
 def generate_ollama_batch_embeddings(
     model: str, texts: list[str], url: str, key: str = ""
 ) -> Optional[list[list[float]]]:
@@ -471,14 +447,6 @@ def generate_embeddings(engine: str, model: str, text: Union[str, list[str]], **
                 **{"model": model, "texts": [text], "url": url, "key": key}
             )
         return embeddings[0] if isinstance(text, str) else embeddings
-    elif engine == "openai":
-        if isinstance(text, list):
-            embeddings = generate_openai_batch_embeddings(model, text, url, key)
-        else:
-            embeddings = generate_openai_batch_embeddings(model, [text], url, key)
-
-        return embeddings[0] if isinstance(text, str) else embeddings
-
 
 import operator
 from typing import Optional, Sequence

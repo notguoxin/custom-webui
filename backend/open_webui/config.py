@@ -1220,7 +1220,6 @@ RAG_EMBEDDING_BATCH_SIZE = PersistentConfig(
     "rag.embedding_batch_size",
     int(
         os.environ.get("RAG_EMBEDDING_BATCH_SIZE")
-        or os.environ.get("RAG_EMBEDDING_OPENAI_BATCH_SIZE", "1")
     ),
 )
 
