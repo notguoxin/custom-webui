@@ -5,7 +5,6 @@
 
 	import { page } from '$app/stores';
 	import { mobile, showSidebar, user } from '$lib/stores';
-	import { updateChannelById } from '$lib/apis/channels';
 
 	import Cog6 from '$lib/components/icons/Cog6.svelte';
 	import ChannelModal from './ChannelModal.svelte';
@@ -19,27 +18,6 @@
 
 	let itemElement;
 </script>
-
-<ChannelModal
-	bind:show={showEditChannelModal}
-	{channel}
-	edit={true}
-	{onUpdate}
-	onSubmit={async ({ name, access_control }) => {
-		const res = await updateChannelById(localStorage.token, channel.id, {
-			name,
-			access_control
-		}).catch((error) => {
-			toast.error(error.message);
-		});
-
-		if (res) {
-			toast.success('Channel updated successfully');
-		}
-
-		onUpdate();
-	}}
-/>
 
 <div
 	bind:this={itemElement}

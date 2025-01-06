@@ -17,7 +17,6 @@
 		scrollPaginationEnabled,
 		currentChatPage,
 		temporaryChatEnabled,
-		channels,
 		socket,
 		config
 	} from '$lib/stores';
@@ -52,7 +51,6 @@
 	import Plus from '../icons/Plus.svelte';
 	import Tooltip from '../common/Tooltip.svelte';
 	import Folders from './Sidebar/Folders.svelte';
-	import { getChannels, createNewChannel } from '$lib/apis/channels';
 	import ChannelModal from './Sidebar/ChannelModal.svelte';
 	import ChannelItem from './Sidebar/ChannelItem.svelte';
 	import PencilSquare from '../icons/PencilSquare.svelte';
@@ -150,10 +148,6 @@
 		if (res) {
 			await initFolders();
 		}
-	};
-
-	const initChannels = async () => {
-		await channels.set(await getChannels(localStorage.token));
 	};
 
 	const initChatList = async () => {
@@ -359,7 +353,6 @@
 			localStorage.sidebar = value;
 		});
 
-		await initChannels();
 		await initChatList();
 
 		window.addEventListener('keydown', onKeyDown);
@@ -403,24 +396,6 @@
 	}}
 />
 
-<ChannelModal
-	bind:show={showCreateChannel}
-	onSubmit={async ({ name, access_control }) => {
-		const res = await createNewChannel(localStorage.token, {
-			name: name,
-			access_control: access_control
-		}).catch((error) => {
-			toast.error(error);
-			return null;
-		});
-
-		if (res) {
-			$socket.emit('join-channels', { auth: { token: $user.token } });
-			await initChannels();
-			showCreateChannel = false;
-		}
-	}}
-/>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 
@@ -565,28 +540,6 @@
 				? 'opacity-20'
 				: ''}"
 		>
-			{#if $config?.features?.enable_channels && ($user.role === 'admin' || $channels.length > 0) && !search}
-				<Folder
-					className="px-2 mt-0.5"
-					name={$i18n.t('Channels')}
-					dragAndDrop={false}
-					onAdd={$user.role === 'admin'
-						? () => {
-								showCreateChannel = true;
-							}
-						: null}
-					onAddLabel={$i18n.t('Create Channel')}
-				>
-					{#each $channels as channel}
-						<ChannelItem
-							{channel}
-							onUpdate={async () => {
-								await initChannels();
-							}}
-						/>
-					{/each}
-				</Folder>
-			{/if}
 
 			<Folder
 				collapsible={!search}
