@@ -332,8 +332,15 @@ print(
  \___/| .__/ \___|_| |_|    \_/\_/ \___|_.__/ \___/|___|
       |_|
 
+                   .___.__  _____.__           .___ ___.             ________               ____  ___.__        
+  _____   ____   __| _/|__|/ ____\__| ____   __| _/ \_ |__ ___.__.  /  _____/ __ __  ____   \   \/  /|__| ____  
+ /     \ /  _ \ / __ | |  \   __\|  |/ __ \ / __ |   | __ <   |  | /   \  ___|  |  \/  _ \   \     / |  |/    \ 
+|  Y Y  (  <_> ) /_/ | |  ||  |  |  \  ___// /_/ |   | \_\ \___  | \    \_\  \  |  (  <_> )  /     \ |  |   |  \
+|__|_|  /\____/\____ | |__||__|  |__|\___  >____ |   |___  / ____|  \______  /____/ \____/  /___/\  \|__|___|  /
+      \/            \/                   \/     \/       \/\/              \/                     \_/        \/ 
 
-v{VERSION} - building the best open-source AI user interface.
+
+v{VERSION} - modified by Guo Xin.
 {f"Commit: {WEBUI_BUILD_HASH}" if WEBUI_BUILD_HASH != "dev-build" else ""}
 https://github.com/open-webui/open-webui
 """
@@ -371,19 +378,6 @@ app.state.config.OLLAMA_BASE_URLS = OLLAMA_BASE_URLS
 app.state.config.OLLAMA_API_CONFIGS = OLLAMA_API_CONFIGS
 
 app.state.OLLAMA_MODELS = {}
-
-########################################
-#
-# OPENAI
-#
-########################################
-
-app.state.config.ENABLE_OPENAI_API = ENABLE_OPENAI_API
-app.state.config.OPENAI_API_BASE_URLS = OPENAI_API_BASE_URLS
-app.state.config.OPENAI_API_KEYS = OPENAI_API_KEYS
-app.state.config.OPENAI_API_CONFIGS = OPENAI_API_CONFIGS
-
-app.state.OPENAI_MODELS = {}
 
 ########################################
 #
@@ -563,66 +557,6 @@ app.state.EMBEDDING_FUNCTION = get_embedding_function(
     app.state.config.RAG_EMBEDDING_BATCH_SIZE,
 )
 
-
-########################################
-#
-# IMAGES
-#
-########################################
-
-app.state.config.IMAGE_GENERATION_ENGINE = IMAGE_GENERATION_ENGINE
-app.state.config.ENABLE_IMAGE_GENERATION = ENABLE_IMAGE_GENERATION
-
-app.state.config.IMAGES_OPENAI_API_BASE_URL = IMAGES_OPENAI_API_BASE_URL
-app.state.config.IMAGES_OPENAI_API_KEY = IMAGES_OPENAI_API_KEY
-
-app.state.config.IMAGE_GENERATION_MODEL = IMAGE_GENERATION_MODEL
-
-app.state.config.AUTOMATIC1111_BASE_URL = AUTOMATIC1111_BASE_URL
-app.state.config.AUTOMATIC1111_API_AUTH = AUTOMATIC1111_API_AUTH
-app.state.config.AUTOMATIC1111_CFG_SCALE = AUTOMATIC1111_CFG_SCALE
-app.state.config.AUTOMATIC1111_SAMPLER = AUTOMATIC1111_SAMPLER
-app.state.config.AUTOMATIC1111_SCHEDULER = AUTOMATIC1111_SCHEDULER
-app.state.config.COMFYUI_BASE_URL = COMFYUI_BASE_URL
-app.state.config.COMFYUI_API_KEY = COMFYUI_API_KEY
-app.state.config.COMFYUI_WORKFLOW = COMFYUI_WORKFLOW
-app.state.config.COMFYUI_WORKFLOW_NODES = COMFYUI_WORKFLOW_NODES
-
-app.state.config.IMAGE_SIZE = IMAGE_SIZE
-app.state.config.IMAGE_STEPS = IMAGE_STEPS
-
-
-########################################
-#
-# AUDIO
-#
-########################################
-
-app.state.config.STT_OPENAI_API_BASE_URL = AUDIO_STT_OPENAI_API_BASE_URL
-app.state.config.STT_OPENAI_API_KEY = AUDIO_STT_OPENAI_API_KEY
-app.state.config.STT_ENGINE = AUDIO_STT_ENGINE
-app.state.config.STT_MODEL = AUDIO_STT_MODEL
-
-app.state.config.WHISPER_MODEL = WHISPER_MODEL
-
-app.state.config.TTS_OPENAI_API_BASE_URL = AUDIO_TTS_OPENAI_API_BASE_URL
-app.state.config.TTS_OPENAI_API_KEY = AUDIO_TTS_OPENAI_API_KEY
-app.state.config.TTS_ENGINE = AUDIO_TTS_ENGINE
-app.state.config.TTS_MODEL = AUDIO_TTS_MODEL
-app.state.config.TTS_VOICE = AUDIO_TTS_VOICE
-app.state.config.TTS_API_KEY = AUDIO_TTS_API_KEY
-app.state.config.TTS_SPLIT_ON = AUDIO_TTS_SPLIT_ON
-
-
-app.state.config.TTS_AZURE_SPEECH_REGION = AUDIO_TTS_AZURE_SPEECH_REGION
-app.state.config.TTS_AZURE_SPEECH_OUTPUT_FORMAT = AUDIO_TTS_AZURE_SPEECH_OUTPUT_FORMAT
-
-
-app.state.faster_whisper_model = None
-app.state.speech_synthesiser = None
-app.state.speech_speaker_embeddings_dataset = None
-
-
 ########################################
 #
 # TASKS
@@ -652,7 +586,6 @@ app.state.config.AUTOCOMPLETE_GENERATION_PROMPT_TEMPLATE = (
 app.state.config.AUTOCOMPLETE_GENERATION_INPUT_MAX_LENGTH = (
     AUTOCOMPLETE_GENERATION_INPUT_MAX_LENGTH
 )
-
 
 ########################################
 #
@@ -736,8 +669,6 @@ app.mount("/ws", socket_app)
 
 
 app.include_router(ollama.router, prefix="/ollama", tags=["ollama"])
-app.include_router(openai.router, prefix="/openai", tags=["openai"])
-
 
 app.include_router(pipelines.router, prefix="/api/v1/pipelines", tags=["pipelines"])
 app.include_router(tasks.router, prefix="/api/v1/tasks", tags=["tasks"])
@@ -1137,22 +1068,6 @@ async def get_manifest_json():
             },
         ],
     }
-
-
-@app.get("/opensearch.xml")
-async def get_opensearch_xml():
-    xml_content = rf"""
-    <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-    <ShortName>{WEBUI_NAME}</ShortName>
-    <Description>Search {WEBUI_NAME}</Description>
-    <InputEncoding>UTF-8</InputEncoding>
-    <Image width="16" height="16" type="image/x-icon">{app.state.config.WEBUI_URL}/static/favicon.png</Image>
-    <Url type="text/html" method="get" template="{app.state.config.WEBUI_URL}/?q={"{searchTerms}"}"/>
-    <moz:SearchForm>{app.state.config.WEBUI_URL}</moz:SearchForm>
-    </OpenSearchDescription>
-    """
-    return Response(content=xml_content, media_type="application/xml")
-
 
 @app.get("/health")
 async def healthcheck():

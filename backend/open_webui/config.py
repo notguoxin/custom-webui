@@ -9,7 +9,6 @@ from urllib.parse import urlparse
 
 import chromadb
 import requests
-import yaml
 from open_webui.internal.db import Base, get_db
 from open_webui.env import (
     OPEN_WEBUI_DIR,
@@ -106,49 +105,6 @@ DEFAULT_CONFIG = {
     "ui": {
         "default_locale": "",
         "prompt_suggestions": [
-            {
-                "title": [
-                    "Help me study",
-                    "vocabulary for a college entrance exam",
-                ],
-                "content": "Help me study vocabulary: write a sentence for me to fill in the blank, and I'll try to pick the correct option.",
-            },
-            {
-                "title": [
-                    "Give me ideas",
-                    "for what to do with my kids' art",
-                ],
-                "content": "What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter.",
-            },
-            {
-                "title": ["Tell me a fun fact", "about the Roman Empire"],
-                "content": "Tell me a random fun fact about the Roman Empire",
-            },
-            {
-                "title": [
-                    "Show me a code snippet",
-                    "of a website's sticky header",
-                ],
-                "content": "Show me a code snippet of a website's sticky header in CSS and JavaScript.",
-            },
-            {
-                "title": [
-                    "Explain options trading",
-                    "if I'm familiar with buying and selling stocks",
-                ],
-                "content": "Explain options trading in simple terms if I'm familiar with buying and selling stocks.",
-            },
-            {
-                "title": ["Overcome procrastination", "give me tips"],
-                "content": "Could you start by asking me about instances when I procrastinate the most and then give me some suggestions to overcome it?",
-            },
-            {
-                "title": [
-                    "Grammar check",
-                    "rewrite it for better readability ",
-                ],
-                "content": 'Check the following sentence for grammar and clarity: "[sentence]". Rewrite it for better readability while maintaining its original meaning.',
-            },
         ],
     },
 }
@@ -582,12 +538,6 @@ if CUSTOM_NAME:
 
 STORAGE_PROVIDER = os.environ.get("STORAGE_PROVIDER", "")  # defaults to local, s3
 
-S3_ACCESS_KEY_ID = os.environ.get("S3_ACCESS_KEY_ID", None)
-S3_SECRET_ACCESS_KEY = os.environ.get("S3_SECRET_ACCESS_KEY", None)
-S3_REGION_NAME = os.environ.get("S3_REGION_NAME", None)
-S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME", None)
-S3_ENDPOINT_URL = os.environ.get("S3_ENDPOINT_URL", None)
-
 ####################################
 # File Upload DIR
 ####################################
@@ -660,62 +610,6 @@ OLLAMA_API_CONFIGS = PersistentConfig(
     "ollama.api_configs",
     {},
 )
-
-####################################
-# OPENAI_API
-####################################
-
-
-ENABLE_OPENAI_API = PersistentConfig(
-    "ENABLE_OPENAI_API",
-    "openai.enable",
-    os.environ.get("ENABLE_OPENAI_API", "True").lower() == "true",
-)
-
-
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-OPENAI_API_BASE_URL = os.environ.get("OPENAI_API_BASE_URL", "")
-
-
-if OPENAI_API_BASE_URL == "":
-    OPENAI_API_BASE_URL = "https://api.openai.com/v1"
-
-OPENAI_API_KEYS = os.environ.get("OPENAI_API_KEYS", "")
-OPENAI_API_KEYS = OPENAI_API_KEYS if OPENAI_API_KEYS != "" else OPENAI_API_KEY
-
-OPENAI_API_KEYS = [url.strip() for url in OPENAI_API_KEYS.split(";")]
-OPENAI_API_KEYS = PersistentConfig(
-    "OPENAI_API_KEYS", "openai.api_keys", OPENAI_API_KEYS
-)
-
-OPENAI_API_BASE_URLS = os.environ.get("OPENAI_API_BASE_URLS", "")
-OPENAI_API_BASE_URLS = (
-    OPENAI_API_BASE_URLS if OPENAI_API_BASE_URLS != "" else OPENAI_API_BASE_URL
-)
-
-OPENAI_API_BASE_URLS = [
-    url.strip() if url != "" else "https://api.openai.com/v1"
-    for url in OPENAI_API_BASE_URLS.split(";")
-]
-OPENAI_API_BASE_URLS = PersistentConfig(
-    "OPENAI_API_BASE_URLS", "openai.api_base_urls", OPENAI_API_BASE_URLS
-)
-
-OPENAI_API_CONFIGS = PersistentConfig(
-    "OPENAI_API_CONFIGS",
-    "openai.api_configs",
-    {},
-)
-
-# Get the actual OpenAI API key based on the base URL
-OPENAI_API_KEY = ""
-try:
-    OPENAI_API_KEY = OPENAI_API_KEYS.value[
-        OPENAI_API_BASE_URLS.value.index("https://api.openai.com/v1")
-    ]
-except Exception:
-    pass
-OPENAI_API_BASE_URL = "https://api.openai.com/v1"
 
 ####################################
 # WEBUI
@@ -1409,16 +1303,6 @@ RAG_TEMPLATE = PersistentConfig(
     os.environ.get("RAG_TEMPLATE", DEFAULT_RAG_TEMPLATE),
 )
 
-RAG_OPENAI_API_BASE_URL = PersistentConfig(
-    "RAG_OPENAI_API_BASE_URL",
-    "rag.openai_api_base_url",
-    os.getenv("RAG_OPENAI_API_BASE_URL", OPENAI_API_BASE_URL),
-)
-RAG_OPENAI_API_KEY = PersistentConfig(
-    "RAG_OPENAI_API_KEY",
-    "rag.openai_api_key",
-    os.getenv("RAG_OPENAI_API_KEY", OPENAI_API_KEY),
-)
 
 RAG_OLLAMA_BASE_URL = PersistentConfig(
     "RAG_OLLAMA_BASE_URL",
@@ -1779,17 +1663,6 @@ COMFYUI_WORKFLOW_NODES = PersistentConfig(
     [],
 )
 
-IMAGES_OPENAI_API_BASE_URL = PersistentConfig(
-    "IMAGES_OPENAI_API_BASE_URL",
-    "image_generation.openai.api_base_url",
-    os.getenv("IMAGES_OPENAI_API_BASE_URL", OPENAI_API_BASE_URL),
-)
-IMAGES_OPENAI_API_KEY = PersistentConfig(
-    "IMAGES_OPENAI_API_KEY",
-    "image_generation.openai.api_key",
-    os.getenv("IMAGES_OPENAI_API_KEY", OPENAI_API_KEY),
-)
-
 IMAGE_SIZE = PersistentConfig(
     "IMAGE_SIZE", "image_generation.size", os.getenv("IMAGE_SIZE", "512x512")
 )
@@ -1802,104 +1675,6 @@ IMAGE_GENERATION_MODEL = PersistentConfig(
     "IMAGE_GENERATION_MODEL",
     "image_generation.model",
     os.getenv("IMAGE_GENERATION_MODEL", ""),
-)
-
-####################################
-# Audio
-####################################
-
-# Transcription
-WHISPER_MODEL = PersistentConfig(
-    "WHISPER_MODEL",
-    "audio.stt.whisper_model",
-    os.getenv("WHISPER_MODEL", "base"),
-)
-
-WHISPER_MODEL_DIR = os.getenv("WHISPER_MODEL_DIR", f"{CACHE_DIR}/whisper/models")
-WHISPER_MODEL_AUTO_UPDATE = (
-    not OFFLINE_MODE
-    and os.environ.get("WHISPER_MODEL_AUTO_UPDATE", "").lower() == "true"
-)
-
-
-AUDIO_STT_OPENAI_API_BASE_URL = PersistentConfig(
-    "AUDIO_STT_OPENAI_API_BASE_URL",
-    "audio.stt.openai.api_base_url",
-    os.getenv("AUDIO_STT_OPENAI_API_BASE_URL", OPENAI_API_BASE_URL),
-)
-
-AUDIO_STT_OPENAI_API_KEY = PersistentConfig(
-    "AUDIO_STT_OPENAI_API_KEY",
-    "audio.stt.openai.api_key",
-    os.getenv("AUDIO_STT_OPENAI_API_KEY", OPENAI_API_KEY),
-)
-
-AUDIO_STT_ENGINE = PersistentConfig(
-    "AUDIO_STT_ENGINE",
-    "audio.stt.engine",
-    os.getenv("AUDIO_STT_ENGINE", ""),
-)
-
-AUDIO_STT_MODEL = PersistentConfig(
-    "AUDIO_STT_MODEL",
-    "audio.stt.model",
-    os.getenv("AUDIO_STT_MODEL", ""),
-)
-
-AUDIO_TTS_OPENAI_API_BASE_URL = PersistentConfig(
-    "AUDIO_TTS_OPENAI_API_BASE_URL",
-    "audio.tts.openai.api_base_url",
-    os.getenv("AUDIO_TTS_OPENAI_API_BASE_URL", OPENAI_API_BASE_URL),
-)
-AUDIO_TTS_OPENAI_API_KEY = PersistentConfig(
-    "AUDIO_TTS_OPENAI_API_KEY",
-    "audio.tts.openai.api_key",
-    os.getenv("AUDIO_TTS_OPENAI_API_KEY", OPENAI_API_KEY),
-)
-
-AUDIO_TTS_API_KEY = PersistentConfig(
-    "AUDIO_TTS_API_KEY",
-    "audio.tts.api_key",
-    os.getenv("AUDIO_TTS_API_KEY", ""),
-)
-
-AUDIO_TTS_ENGINE = PersistentConfig(
-    "AUDIO_TTS_ENGINE",
-    "audio.tts.engine",
-    os.getenv("AUDIO_TTS_ENGINE", ""),
-)
-
-
-AUDIO_TTS_MODEL = PersistentConfig(
-    "AUDIO_TTS_MODEL",
-    "audio.tts.model",
-    os.getenv("AUDIO_TTS_MODEL", "tts-1"),  # OpenAI default model
-)
-
-AUDIO_TTS_VOICE = PersistentConfig(
-    "AUDIO_TTS_VOICE",
-    "audio.tts.voice",
-    os.getenv("AUDIO_TTS_VOICE", "alloy"),  # OpenAI default voice
-)
-
-AUDIO_TTS_SPLIT_ON = PersistentConfig(
-    "AUDIO_TTS_SPLIT_ON",
-    "audio.tts.split_on",
-    os.getenv("AUDIO_TTS_SPLIT_ON", "punctuation"),
-)
-
-AUDIO_TTS_AZURE_SPEECH_REGION = PersistentConfig(
-    "AUDIO_TTS_AZURE_SPEECH_REGION",
-    "audio.tts.azure.speech_region",
-    os.getenv("AUDIO_TTS_AZURE_SPEECH_REGION", "eastus"),
-)
-
-AUDIO_TTS_AZURE_SPEECH_OUTPUT_FORMAT = PersistentConfig(
-    "AUDIO_TTS_AZURE_SPEECH_OUTPUT_FORMAT",
-    "audio.tts.azure.speech_output_format",
-    os.getenv(
-        "AUDIO_TTS_AZURE_SPEECH_OUTPUT_FORMAT", "audio-24khz-160kbitrate-mono-mp3"
-    ),
 )
 
 
