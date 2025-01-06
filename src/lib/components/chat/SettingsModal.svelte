@@ -333,17 +333,6 @@
 				id="settings-tabs-container"
 				class="tabs flex flex-row overflow-x-auto gap-2.5 md:gap-1 md:flex-col flex-1 md:flex-none md:w-40 dark:text-gray-200 text-sm font-medium text-left mb-1 md:mb-0 -translate-y-1"
 			>
-				<div class="hidden md:flex w-full rounded-xl -mb-1 px-0.5 gap-2" id="settings-search">
-					<div class="self-center rounded-l-xl bg-transparent">
-						<Search className="size-3.5" />
-					</div>
-					<input
-						class="w-full py-1.5 text-sm bg-transparent dark:text-gray-300 outline-none"
-						bind:value={search}
-						on:input={searchDebounceHandler}
-						placeholder={$i18n.t('Search')}
-					/>
-				</div>
 
 				{#if visibleTabs.length > 0}
 					{#each visibleTabs as tabId (tabId)}

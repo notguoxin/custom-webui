@@ -22,6 +22,10 @@ from open_webui.socket.main import (
 from open_webui.models.functions import Functions
 from open_webui.models.models import Models
 
+from open_webui.routers.ollama import (
+    generate_chat_completion as generate_ollama_chat_completion,
+)
+
 
 from open_webui.utils.plugin import load_function_module_by_id
 from open_webui.utils.models import get_all_models, check_model_access
