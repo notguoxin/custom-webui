@@ -27,7 +27,6 @@
 	import Tooltip from '../common/Tooltip.svelte';
 	import InputMenu from './MessageInput/InputMenu.svelte';
 	import Headphone from '../icons/Headphone.svelte';
-	import VoiceRecording from './MessageInput/VoiceRecording.svelte';
 	import FileItem from '../common/FileItem.svelte';
 	import FilesOverlay from './MessageInput/FilesOverlay.svelte';
 	import Commands from './MessageInput/Commands.svelte';
@@ -460,30 +459,6 @@
 						}}
 					/>
 
-					{#if recording}
-						<VoiceRecording
-							bind:recording
-							on:cancel={async () => {
-								recording = false;
-
-								await tick();
-								document.getElementById('chat-input')?.focus();
-							}}
-							on:confirm={async (e) => {
-								const { text, filename } = e.detail;
-								prompt = `${prompt}${text} `;
-
-								recording = false;
-
-								await tick();
-								document.getElementById('chat-input')?.focus();
-
-								if ($settings?.speechAutoSend ?? false) {
-									dispatch('submit', prompt);
-								}
-							}}
-						/>
-					{:else}
 						<form
 							class="w-full flex gap-1.5"
 							on:submit|preventDefault={() => {
