@@ -4,13 +4,6 @@
 	import { config, functions, models, settings, user } from '$lib/stores';
 	import { createEventDispatcher, onMount, getContext, tick } from 'svelte';
 
-	import {
-		getUserValvesSpecById as getFunctionUserValvesSpecById,
-		getUserValvesById as getFunctionUserValvesById,
-		updateUserValvesById as updateFunctionUserValvesById,
-		getFunctions
-	} from '$lib/apis/functions';
-
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import Valves from '$lib/components/common/Valves.svelte';
