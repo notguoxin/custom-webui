@@ -224,7 +224,7 @@ class AppConfig:
 ENABLE_API_KEY = PersistentConfig(
     "ENABLE_API_KEY",
     "auth.api_key.enable",
-    os.environ.get("ENABLE_API_KEY", "True").lower() == "true",
+    "false",
 )
 
 ENABLE_API_KEY_ENDPOINT_RESTRICTIONS = PersistentConfig(
@@ -616,7 +616,7 @@ OLLAMA_API_CONFIGS = PersistentConfig(
 
 
 WEBUI_URL = PersistentConfig(
-    "WEBUI_URL", "webui.url", os.environ.get("WEBUI_URL", "http://localhost:3000")
+    "WEBUI_URL", "webui.url", os.environ.get("WEBUI_URL", "http://localhost:8080")
 )
 
 
@@ -788,13 +788,13 @@ ENABLE_ADMIN_CHAT_ACCESS = (
 ENABLE_COMMUNITY_SHARING = PersistentConfig(
     "ENABLE_COMMUNITY_SHARING",
     "ui.enable_community_sharing",
-    os.environ.get("ENABLE_COMMUNITY_SHARING", "True").lower() == "true",
+    "false",
 )
 
 ENABLE_MESSAGE_RATING = PersistentConfig(
     "ENABLE_MESSAGE_RATING",
     "ui.enable_message_rating",
-    os.environ.get("ENABLE_MESSAGE_RATING", "True").lower() == "true",
+    "false",
 )
 
 
@@ -825,11 +825,6 @@ def validate_cors_origin(origin):
 # in your .env file depending on your frontend port, 5173 in this case.
 CORS_ALLOW_ORIGIN = os.environ.get("CORS_ALLOW_ORIGIN", "*").split(";")
 
-if "*" in CORS_ALLOW_ORIGIN:
-    log.warning(
-        "\n\nWARNING: CORS_ALLOW_ORIGIN IS SET TO '*' - NOT RECOMMENDED FOR PRODUCTION DEPLOYMENTS.\n"
-    )
-
 validate_cors_origins(CORS_ALLOW_ORIGIN)
 
 
@@ -855,7 +850,7 @@ WEBUI_BANNERS = PersistentConfig("WEBUI_BANNERS", "ui.banners", banners)
 SHOW_ADMIN_DETAILS = PersistentConfig(
     "SHOW_ADMIN_DETAILS",
     "auth.admin.show",
-    os.environ.get("SHOW_ADMIN_DETAILS", "true").lower() == "true",
+    "false",
 )
 
 ADMIN_EMAIL = PersistentConfig(
@@ -930,7 +925,7 @@ JSON format: { "tags": ["tag1", "tag2", "tag3"] }
 ENABLE_TAGS_GENERATION = PersistentConfig(
     "ENABLE_TAGS_GENERATION",
     "task.tags.enable",
-    os.environ.get("ENABLE_TAGS_GENERATION", "True").lower() == "true",
+    "false",
 )
 
 
@@ -980,7 +975,7 @@ Strictly return in JSON format:
 ENABLE_AUTOCOMPLETE_GENERATION = PersistentConfig(
     "ENABLE_AUTOCOMPLETE_GENERATION",
     "task.autocomplete.enable",
-    os.environ.get("ENABLE_AUTOCOMPLETE_GENERATION", "True").lower() == "true",
+    "false",
 )
 
 AUTOCOMPLETE_GENERATION_INPUT_MAX_LENGTH = PersistentConfig(
@@ -1422,7 +1417,7 @@ RAG_WEB_SEARCH_CONCURRENT_REQUESTS = PersistentConfig(
 ENABLE_LDAP = PersistentConfig(
     "ENABLE_LDAP",
     "ldap.enable",
-    os.environ.get("ENABLE_LDAP", "false").lower() == "true",
+    "false",
 )
 
 LDAP_SERVER_LABEL = PersistentConfig(
