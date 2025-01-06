@@ -13,7 +13,6 @@
 
 	import { getModels, getVersionUpdates } from '$lib/apis';
 	import { getAllTags } from '$lib/apis/chats';
-	import { getTools } from '$lib/apis/tools';
 	import { getBanners } from '$lib/apis/configs';
 	import { getUserSettings } from '$lib/apis/users';
 
@@ -25,7 +24,6 @@
 		user,
 		settings,
 		models,
-		tools,
 		tags,
 		banners,
 		showSettings,
@@ -90,7 +88,6 @@
 
 			models.set(await getModels(localStorage.token));
 			banners.set(await getBanners(localStorage.token));
-			tools.set(await getTools(localStorage.token));
 
 			document.addEventListener('keydown', async function (event) {
 				const isCtrlPressed = event.ctrlKey || event.metaKey; // metaKey is for Cmd key on Mac
