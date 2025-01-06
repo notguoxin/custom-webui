@@ -28,7 +28,6 @@
 	import InputMenu from './MessageInput/InputMenu.svelte';
 	import Headphone from '../icons/Headphone.svelte';
 	import FileItem from '../common/FileItem.svelte';
-	import FilesOverlay from './MessageInput/FilesOverlay.svelte';
 	import Commands from './MessageInput/Commands.svelte';
 	import XMark from '../icons/XMark.svelte';
 	import RichTextInput from '../common/RichTextInput.svelte';
