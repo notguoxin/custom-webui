@@ -9,27 +9,26 @@
 
 	const dispatch = createEventDispatcher();
 
-	import { config, models, settings, user } from '$lib/stores';
-	import { synthesizeOpenAISpeech } from '$lib/apis/audio';
-	import { imageGenerations } from '$lib/apis/images';
+	import { config, models, settings, user } from '../../../../lib/stores';
+	import { imageGenerations } from '../../../../lib/apis/images';
 	import {
 		copyToClipboard as _copyToClipboard,
 		approximateToHumanReadable,
 		getMessageContentParts,
 		sanitizeResponseContent,
 		createMessagesList
-	} from '$lib/utils';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	} from '../../../../lib/utils';
+	import { WEBUI_BASE_URL } from '../../../../lib/constants';
 
 	import Name from './Name.svelte';
 	import ProfileImage from './ProfileImage.svelte';
 	import Skeleton from './Skeleton.svelte';
-	import Image from '$lib/components/common/Image.svelte';
-	import Tooltip from '$lib/components/common/Tooltip.svelte';
+	import Image from '../../../../lib/components/common/Image.svelte';
+	import Tooltip from '../../../../lib/components/common/Tooltip.svelte';
 	import RateComment from './RateComment.svelte';
-	import Spinner from '$lib/components/common/Spinner.svelte';
+	import Spinner from '../../../../lib/components/common/Spinner.svelte';
 	import WebSearchResults from './ResponseMessage/WebSearchResults.svelte';
-	import Sparkles from '$lib/components/icons/Sparkles.svelte';
+	import Sparkles from '../../../../lib/components/icons/Sparkles.svelte';
 	import Error from './Error.svelte';
 	import Citations from './Citations.svelte';
 	import CodeExecutions from './CodeExecutions.svelte';
@@ -37,9 +36,8 @@
 	import type { Writable } from 'svelte/store';
 	import type { i18n as i18nType } from 'i18next';
 	import ContentRenderer from './ContentRenderer.svelte';
-	import { createNewFeedback, getFeedbackById, updateFeedbackById } from '$lib/apis/evaluations';
-	import { getChatById } from '$lib/apis/chats';
-	import { generateTags } from '$lib/apis';
+	import { getChatById } from '../../../../lib/apis/chats';
+	import { generateTags } from '../../../../lib/apis';
 
 	interface MessageType {
 		id: string;
@@ -404,25 +402,6 @@
 		}, {});
 		feedbackItem.meta.base_models = baseModels;
 
-		let feedback = null;
-		if (message?.feedbackId) {
-			feedback = await updateFeedbackById(
-				localStorage.token,
-				message.feedbackId,
-				feedbackItem
-			).catch((error) => {
-				toast.error(error);
-			});
-		} else {
-			feedback = await createNewFeedback(localStorage.token, feedbackItem).catch((error) => {
-				toast.error(error);
-			});
-
-			if (feedback) {
-				updatedMessage.feedbackId = feedback.id;
-			}
-		}
-
 		console.log(updatedMessage);
 		saveMessage(message.id, updatedMessage);
 
@@ -446,13 +425,6 @@
 					feedbackItem.data.tags = tags;
 
 					saveMessage(message.id, updatedMessage);
-					await updateFeedbackById(
-						localStorage.token,
-						updatedMessage.feedbackId,
-						feedbackItem
-					).catch((error) => {
-						toast.error(error);
-					});
 				}
 			}
 		}
