@@ -35,7 +35,7 @@ export const getOpenAIConfig = async (token: string = '') => {
 type OpenAIConfig = {
 	ENABLE_OPENAI_API: boolean;
 	OPENAI_API_BASE_URLS: string[];
-	OPENAI_AP******: string[];
+	OPENAI_API_KEYS: string[];
 	OPENAI_API_CONFIGS: object;
 };
 
@@ -170,7 +170,7 @@ export const getOpenAIKeys = async (token: string = '') => {
 		throw error;
 	}
 
-	return res.OPENAI_AP******;
+	return res.OPENAI_API_KEYS;
 };
 
 export const updateOpenAIKeys = async (token: string = '', keys: string[]) => {
@@ -205,7 +205,7 @@ export const updateOpenAIKeys = async (token: string = '', keys: string[]) => {
 		throw error;
 	}
 
-	return res.OPENAI_AP******;
+	return res.OPENAI_API_KEYS;
 };
 
 export const getOpenAIModels = async (token: string, urlIdx?: number) => {
