@@ -4,10 +4,6 @@
 
 	import AdvancedParams from '$lib/components/chat/Settings/Advanced/AdvancedParams.svelte';
 	import Tags from '$lib/components/common/Tags.svelte';
-	import Knowledge from '$lib/components/workspace/Models/Knowledge.svelte';
-	import ToolsSelector from '$lib/components/workspace/Models/ToolsSelector.svelte';
-	import FiltersSelector from '$lib/components/workspace/Models/FiltersSelector.svelte';
-	import ActionsSelector from '$lib/components/workspace/Models/ActionsSelector.svelte';
 	import Capabilities from '$lib/components/workspace/Models/Capabilities.svelte';
 	import Textarea from '$lib/components/common/Textarea.svelte';
 	import { getTools } from '$lib/apis/tools';
@@ -683,27 +679,6 @@
 
 					<hr class=" border-gray-50 dark:border-gray-850 my-1.5" />
 
-					<div class="my-2">
-						<Knowledge bind:selectedKnowledge={knowledge} collections={$knowledgeCollections} />
-					</div>
-
-					<div class="my-2">
-						<ToolsSelector bind:selectedToolIds={toolIds} tools={$tools} />
-					</div>
-
-					<div class="my-2">
-						<FiltersSelector
-							bind:selectedFilterIds={filterIds}
-							filters={$functions.filter((func) => func.type === 'filter')}
-						/>
-					</div>
-
-					<div class="my-2">
-						<ActionsSelector
-							bind:selectedActionIds={actionIds}
-							actions={$functions.filter((func) => func.type === 'action')}
-						/>
-					</div>
 
 					<div class="my-2">
 						<Capabilities bind:capabilities />
