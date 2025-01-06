@@ -8,7 +8,6 @@
 
 	import Modal from '../common/Modal.svelte';
 	import Controls from './Controls/Controls.svelte';
-	import CallOverlay from './MessageInput/CallOverlay.svelte';
 	import Drawer from '../common/Drawer.svelte';
 	import Overview from './Overview.svelte';
 	import EllipsisVertical from '../icons/EllipsisVertical.svelte';

@@ -4,7 +4,6 @@
 	const i18n = getContext('i18n');
 
 	import { models } from '$lib/stores';
-	import { verifyOpenAIConnection } from '$lib/apis/openai';
 	import { verifyOllamaConnection } from '$lib/apis/ollama';
 
 	import Modal from '$lib/components/common/Modal.svelte';
@@ -45,21 +44,9 @@
 		}
 	};
 
-	const verifyOpenAIHandler = async () => {
-		const res = await verifyOpenAIConnection(localStorage.token, url, key).catch((error) => {
-			toast.error(error);
-		});
-
-		if (res) {
-			toast.success($i18n.t('Server connection verified'));
-		}
-	};
-
 	const verifyHandler = () => {
 		if (ollama) {
 			verifyOllamaHandler();
-		} else {
-			verifyOpenAIHandler();
 		}
 	};
 
