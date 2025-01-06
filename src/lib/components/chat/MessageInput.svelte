@@ -407,25 +407,6 @@
 							{/if}
 						</div>
 					{/if}
-
-					<Commands
-						bind:this={commandsElement}
-						bind:prompt
-						bind:files
-						on:upload={(e) => {
-							dispatch('upload', e.detail);
-						}}
-						on:select={(e) => {
-							const data = e.detail;
-
-							if (data?.type === 'model') {
-								atSelectedModel = data.data;
-							}
-
-							const chatInputElement = document.getElementById('chat-input');
-							chatInputElement?.focus();
-						}}
-					/>
 				</div>
 			</div>
 		</div>
