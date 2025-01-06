@@ -52,7 +52,6 @@ from open_webui.env import (
     ENV,
     SRC_LOG_LEVELS,
     AIOHTTP_CLIENT_TIMEOUT,
-    AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST,
     BYPASS_MODEL_ACCESS_CONTROL,
 )
 from open_webui.constants import ERROR_MESSAGES
@@ -69,9 +68,8 @@ log.setLevel(SRC_LOG_LEVELS["OLLAMA"])
 
 
 async def send_get_request(url, key=None):
-    timeout = aiohttp.ClientTimeout(total=AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST)
     try:
-        async with aiohttp.ClientSession(timeout=timeout, trust_env=True) as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             async with session.get(
                 url, headers={**({"Authorization": f"Bearer {key}"} if key else {})}
             ) as response:
@@ -186,7 +184,6 @@ async def verify_connection(
     key = form_data.key
 
     async with aiohttp.ClientSession(
-        timeout=aiohttp.ClientTimeout(total=AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST)
     ) as session:
         try:
             async with session.get(

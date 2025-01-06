@@ -20,19 +20,6 @@ from open_webui.socket.main import (
 )
 from open_webui.functions import generate_function_chat_completion
 
-from open_webui.routers.openai import (
-    generate_chat_completion as generate_openai_chat_completion,
-)
-
-from open_webui.routers.ollama import (
-    generate_chat_completion as generate_ollama_chat_completion,
-)
-
-from open_webui.routers.pipelines import (
-    process_pipeline_inlet_filter,
-    process_pipeline_outlet_filter,
-)
-
 from open_webui.models.functions import Functions
 from open_webui.models.models import Models
 
@@ -67,13 +54,6 @@ async def generate_chat_completion(
     model_id = form_data["model"]
     if model_id not in models:
         raise Exception("Model not found")
-
-    # Process the form_data through the pipeline
-    try:
-        form_data = process_pipeline_inlet_filter(request, form_data, user, models)
-    except Exception as e:
-        raise e
-
     model = models[model_id]
 
     # Check if user has access to the model
@@ -151,11 +131,6 @@ async def generate_chat_completion(
             )
         else:
             return convert_response_ollama_to_openai(response)
-    else:
-        return await generate_openai_chat_completion(
-            request=request, form_data=form_data, user=user, bypass_filter=bypass_filter
-        )
-
 
 chat_completion = generate_chat_completion
 

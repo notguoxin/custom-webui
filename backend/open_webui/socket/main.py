@@ -11,10 +11,8 @@ from open_webui.models.chats import Chats
 from open_webui.env import (
     ENABLE_WEBSOCKET_SUPPORT,
     WEBSOCKET_MANAGER,
-    WEBSOCKET_REDIS_URL,
 )
 from open_webui.utils.auth import decode_token
-from open_webui.socket.utils import RedisDict, RedisLock
 
 from open_webui.env import (
     GLOBAL_LOG_LEVEL,
@@ -27,24 +25,14 @@ log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["SOCKET"])
 
 
-if WEBSOCKET_MANAGER == "redis":
-    mgr = socketio.AsyncRedisManager(WEBSOCKET_REDIS_URL)
-    sio = socketio.AsyncServer(
-        cors_allowed_origins=[],
-        async_mode="asgi",
-        transports=(["websocket"] if ENABLE_WEBSOCKET_SUPPORT else ["polling"]),
-        allow_upgrades=ENABLE_WEBSOCKET_SUPPORT,
-        always_connect=True,
-        client_manager=mgr,
-    )
-else:
-    sio = socketio.AsyncServer(
-        cors_allowed_origins=[],
-        async_mode="asgi",
-        transports=(["websocket"] if ENABLE_WEBSOCKET_SUPPORT else ["polling"]),
-        allow_upgrades=ENABLE_WEBSOCKET_SUPPORT,
-        always_connect=True,
-    )
+
+sio = socketio.AsyncServer(
+    cors_allowed_origins=[],
+    async_mode="asgi",
+    transports=(["websocket"] if ENABLE_WEBSOCKET_SUPPORT else ["polling"]),
+    allow_upgrades=ENABLE_WEBSOCKET_SUPPORT,
+    always_connect=True,
+)
 
 
 # Timeout duration in seconds
@@ -52,25 +40,11 @@ TIMEOUT_DURATION = 3
 
 # Dictionary to maintain the user pool
 
-if WEBSOCKET_MANAGER == "redis":
-    log.debug("Using Redis to manage websockets.")
-    SESSION_POOL = RedisDict("open-webui:session_pool", redis_url=WEBSOCKET_REDIS_URL)
-    USER_POOL = RedisDict("open-webui:user_pool", redis_url=WEBSOCKET_REDIS_URL)
-    USAGE_POOL = RedisDict("open-webui:usage_pool", redis_url=WEBSOCKET_REDIS_URL)
 
-    clean_up_lock = RedisLock(
-        redis_url=WEBSOCKET_REDIS_URL,
-        lock_name="usage_cleanup_lock",
-        timeout_secs=TIMEOUT_DURATION * 2,
-    )
-    aquire_func = clean_up_lock.aquire_lock
-    renew_func = clean_up_lock.renew_lock
-    release_func = clean_up_lock.release_lock
-else:
-    SESSION_POOL = {}
-    USER_POOL = {}
-    USAGE_POOL = {}
-    aquire_func = release_func = renew_func = lambda: True
+SESSION_POOL = {}
+USER_POOL = {}
+USAGE_POOL = {}
+aquire_func = release_func = renew_func = lambda: True
 
 
 async def periodic_usage_pool_cleanup():
@@ -81,7 +55,7 @@ async def periodic_usage_pool_cleanup():
     try:
         while True:
             if not renew_func():
-                log.error(f"Unable to renew cleanup lock. Exiting usage pool cleanup.")
+                log.error("Unable to renew cleanup lock. Exiting usage pool cleanup.")
                 raise Exception("Unable to renew usage pool cleanup lock.")
 
             now = int(time.time())
