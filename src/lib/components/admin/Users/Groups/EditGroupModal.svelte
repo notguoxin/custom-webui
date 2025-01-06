@@ -31,10 +31,7 @@
 
 	export let permissions = {
 		workspace: {
-			models: false,
-			knowledge: false,
-			prompts: false,
-			tools: false
+			models: false
 		},
 		chat: {
 			file_upload: true,
@@ -67,10 +64,7 @@
 			description = group.description;
 			permissions = group?.permissions ?? {
 				workspace: {
-					models: false,
-					knowledge: false,
-					prompts: false,
-					tools: false
+					models: false
 				},
 				chat: {
 					file_upload: true,

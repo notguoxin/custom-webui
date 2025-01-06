@@ -1081,8 +1081,7 @@
 
 					// Emit chat event for TTS
 					const messageContentParts = getMessageContentParts(
-						message.content,
-						$config?.audio?.tts?.split_on ?? 'punctuation'
+						message.content
 					);
 					messageContentParts.pop();
 

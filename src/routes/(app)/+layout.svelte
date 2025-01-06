@@ -10,11 +10,9 @@
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 
-	import { getKnowledgeBases } from '$lib/apis/knowledge';
-	import { getFunctions } from '$lib/apis/functions';
+
 	import { getModels, getVersionUpdates } from '$lib/apis';
 	import { getAllTags } from '$lib/apis/chats';
-	import { getPrompts } from '$lib/apis/prompts';
 	import { getTools } from '$lib/apis/tools';
 	import { getBanners } from '$lib/apis/configs';
 	import { getUserSettings } from '$lib/apis/users';
@@ -27,10 +25,7 @@
 		user,
 		settings,
 		models,
-		prompts,
-		knowledge,
 		tools,
-		functions,
 		tags,
 		banners,
 		showSettings,

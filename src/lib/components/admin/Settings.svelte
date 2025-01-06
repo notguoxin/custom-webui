@@ -7,18 +7,13 @@
 	import Database from './Settings/Database.svelte';
 
 	import General from './Settings/General.svelte';
-	import Pipelines from './Settings/Pipelines.svelte';
-	import Audio from './Settings/Audio.svelte';
 	import Images from './Settings/Images.svelte';
 	import Interface from './Settings/Interface.svelte';
 	import Models from './Settings/Models.svelte';
 	import Connections from './Settings/Connections.svelte';
-	import Documents from './Settings/Documents.svelte';
-	import WebSearch from './Settings/WebSearch.svelte';
 
 	import ChartBar from '../icons/ChartBar.svelte';
 	import DocumentChartBar from '../icons/DocumentChartBar.svelte';
-	import Evaluations from './Settings/Evaluations.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -214,32 +209,6 @@
 			<div class=" self-center">{$i18n.t('Interface')}</div>
 		</button>
 
-		<button
-			class="px-0.5 py-1 min-w-fit rounded-lg flex-1 md:flex-none flex text-right transition {selectedTab ===
-			'audio'
-				? ''
-				: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
-			on:click={() => {
-				selectedTab = 'audio';
-			}}
-		>
-			<div class=" self-center mr-2">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 16 16"
-					fill="currentColor"
-					class="w-4 h-4"
-				>
-					<path
-						d="M7.557 2.066A.75.75 0 0 1 8 2.75v10.5a.75.75 0 0 1-1.248.56L3.59 11H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.59l3.162-2.81a.75.75 0 0 1 .805-.124ZM12.95 3.05a.75.75 0 1 0-1.06 1.06 5.5 5.5 0 0 1 0 7.78.75.75 0 1 0 1.06 1.06 7 7 0 0 0 0-9.9Z"
-					/>
-					<path
-						d="M10.828 5.172a.75.75 0 1 0-1.06 1.06 2.5 2.5 0 0 1 0 3.536.75.75 0 1 0 1.06 1.06 4 4 0 0 0 0-5.656Z"
-					/>
-				</svg>
-			</div>
-			<div class=" self-center">{$i18n.t('Audio')}</div>
-		</button>
 
 		<button
 			class="px-0.5 py-1 min-w-fit rounded-lg flex-1 md:flex-none flex text-right transition {selectedTab ===
@@ -294,7 +263,6 @@
 					/>
 				</svg>
 			</div>
-			<div class=" self-center">{$i18n.t('Pipelines')}</div>
 		</button>
 
 		<button
@@ -344,35 +312,9 @@
 			/>
 		{:else if selectedTab === 'models'}
 			<Models />
-		{:else if selectedTab === 'evaluations'}
-			<Evaluations />
-		{:else if selectedTab === 'documents'}
-			<Documents
-				on:save={async () => {
-					toast.success($i18n.t('Settings saved successfully!'));
-
-					await tick();
-					await config.set(await getBackendConfig());
-				}}
-			/>
-		{:else if selectedTab === 'web'}
-			<WebSearch
-				saveHandler={async () => {
-					toast.success($i18n.t('Settings saved successfully!'));
-
-					await tick();
-					await config.set(await getBackendConfig());
-				}}
-			/>
 		{:else if selectedTab === 'interface'}
 			<Interface
 				on:save={() => {
-					toast.success($i18n.t('Settings saved successfully!'));
-				}}
-			/>
-		{:else if selectedTab === 'audio'}
-			<Audio
-				saveHandler={() => {
 					toast.success($i18n.t('Settings saved successfully!'));
 				}}
 			/>
@@ -384,12 +326,6 @@
 			/>
 		{:else if selectedTab === 'db'}
 			<Database
-				saveHandler={() => {
-					toast.success($i18n.t('Settings saved successfully!'));
-				}}
-			/>
-		{:else if selectedTab === 'pipelines'}
-			<Pipelines
 				saveHandler={() => {
 					toast.success($i18n.t('Settings saved successfully!'));
 				}}

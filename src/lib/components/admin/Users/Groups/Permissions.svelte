@@ -7,10 +7,7 @@
 
 	export let permissions = {
 		workspace: {
-			models: false,
-			knowledge: false,
-			prompts: false,
-			tools: false
+			models: false
 		},
 		chat: {
 			delete: true,
@@ -133,36 +130,6 @@
 			</div>
 			<Switch bind:state={permissions.workspace.models} />
 		</div>
-
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Knowledge Access')}
-			</div>
-			<Switch bind:state={permissions.workspace.knowledge} />
-		</div>
-
-		<div class="  flex w-full justify-between my-2 pr-2">
-			<div class=" self-center text-xs font-medium">
-				{$i18n.t('Prompts Access')}
-			</div>
-			<Switch bind:state={permissions.workspace.prompts} />
-		</div>
-
-		<div class=" ">
-			<Tooltip
-				className=" flex w-full justify-between my-2 pr-2"
-				content={$i18n.t(
-					'Warning: Enabling this will allow users to upload arbitrary code on the server.'
-				)}
-				placement="top-start"
-			>
-				<div class=" self-center text-xs font-medium">
-					{$i18n.t('Tools Access')}
-				</div>
-				<Switch bind:state={permissions.workspace.tools} />
-			</Tooltip>
-		</div>
-	</div>
 
 	<hr class=" border-gray-50 dark:border-gray-850 my-2" />
 

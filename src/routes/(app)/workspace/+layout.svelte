@@ -7,9 +7,6 @@
 		user,
 		mobile,
 		models,
-		prompts,
-		knowledge,
-		tools
 	} from '$lib/stores';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';

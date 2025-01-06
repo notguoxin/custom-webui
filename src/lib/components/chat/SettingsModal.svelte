@@ -11,12 +11,10 @@
 	import About from './Settings/About.svelte';
 	import General from './Settings/General.svelte';
 	import Interface from './Settings/Interface.svelte';
-	import Audio from './Settings/Audio.svelte';
 	import Chats from './Settings/Chats.svelte';
 	import User from '../icons/User.svelte';
 	import Personalization from './Settings/Personalization.svelte';
 	import SearchInput from '../layout/Sidebar/SearchInput.svelte';
-	import Search from '../icons/Search.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -134,51 +132,6 @@
 				'customsettings',
 				'userpreferences',
 				'accountpreferences'
-			]
-		},
-		{
-			id: 'audio',
-			title: 'Audio',
-			keywords: [
-				'audio',
-				'sound',
-				'soundsettings',
-				'audiocontrol',
-				'volume',
-				'speech',
-				'speechrecognition',
-				'stt',
-				'speechtotext',
-				'tts',
-				'texttospeech',
-				'playback',
-				'playbackspeed',
-				'voiceplayback',
-				'speechplayback',
-				'audiooutput',
-				'speechengine',
-				'voicecontrol',
-				'audioplayback',
-				'transcription',
-				'autotranscribe',
-				'autosend',
-				'speechsettings',
-				'audiovoice',
-				'voiceoptions',
-				'setvoice',
-				'nonlocalvoices',
-				'savesettings',
-				'audioconfig',
-				'speechconfig',
-				'voicerecognition',
-				'speechsynthesis',
-				'speechmode',
-				'voicespeed',
-				'speechrate',
-				'speechspeed',
-				'audioinput',
-				'audiofeatures',
-				'voicemodes'
 			]
 		},
 		{
