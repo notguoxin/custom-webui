@@ -177,7 +177,7 @@
 					</div>
 				{/if}
 			</div>
-		{:else}
+		{#if ENABLE_OLLAMA_API === null}
 			<div class="flex h-full justify-center">
 				<div class="my-auto">
 					<Spinner className="size-6" />
