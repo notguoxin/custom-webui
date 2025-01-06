@@ -14,7 +14,7 @@
 		models,
 		config,
 		showCallOverlay,
-		tools,
+		,
 		user as _user,
 		showControls
 	} from '$lib/stores';
@@ -22,7 +22,7 @@
 	import { blobToFile, compressImage, createMessagesList, findWordIndices } from '$lib/utils';
 	import { transcribeAudio } from '$lib/apis/audio';
 	import { uploadFile } from '$lib/apis/files';
-	import { getTools } from '$lib/apis/tools';
+	import { get } from '$lib/apis/';
 
 	import { WEBUI_BASE_URL, WEBUI_API_BASE_URL, PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants';
 
@@ -398,7 +398,7 @@
 										</div>
 										<div class=" translate-y-[0.5px] text-ellipsis line-clamp-1 flex">
 											{#each selectedToolIds.map((id) => {
-												return $tools ? $tools.find((t) => t.id === id) : { id: id, name: id };
+												return $ ? $.find((t) => t.id === id) : { id: id, name: id };
 											}) as tool, toolIdx (toolIdx)}
 												<Tooltip
 													content={tool?.meta?.description ?? ''}

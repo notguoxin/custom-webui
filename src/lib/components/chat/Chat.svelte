@@ -35,7 +35,6 @@
 		showOverview,
 		chatTitle,
 		showArtifacts,
-		tools
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -69,7 +68,6 @@
 		generateMoACompletion,
 		stopTask
 	} from '$lib/apis';
-	import { getTools } from '$lib/apis/tools';
 
 	import Banner from '../common/Banner.svelte';
 	import MessageInput from '$lib/components/chat/MessageInput.svelte';
@@ -108,7 +106,6 @@
 	let selectedModelIds = [];
 	$: selectedModelIds = atSelectedModel !== undefined ? [atSelectedModel.id] : selectedModels;
 
-	let selectedToolIds = [];
 	let webSearchEnabled = false;
 
 	let chat = null;
@@ -133,7 +130,6 @@
 
 			prompt = '';
 			files = [];
-			selectedToolIds = [];
 			webSearchEnabled = false;
 
 			loaded = false;
@@ -148,7 +144,6 @@
 
 						prompt = input.prompt;
 						files = input.files;
-						selectedToolIds = input.selectedToolIds;
 						webSearchEnabled = input.webSearchEnabled;
 					} catch (e) {}
 				}
@@ -177,22 +172,6 @@
 	$: if (selectedModels) {
 		setToolIds();
 	}
-
-	const setToolIds = async () => {
-		if (!$tools) {
-			tools.set(await getTools(localStorage.token));
-		}
-
-		if (selectedModels.length !== 1) {
-			return;
-		}
-		const model = $models.find((m) => m.id === selectedModels[0]);
-		if (model) {
-			selectedToolIds = (model?.info?.meta?.toolIds ?? []).filter((id) =>
-				$tools.find((t) => t.id === id)
-			);
-		}
-	};
 
 	const showMessage = async (message) => {
 		const _chatId = JSON.parse(JSON.stringify($chatId));
@@ -693,20 +672,6 @@
 		}
 		if ($page.url.searchParams.get('web-search') === 'true') {
 			webSearchEnabled = true;
-		}
-
-		if ($page.url.searchParams.get('tools')) {
-			selectedToolIds = $page.url.searchParams
-				.get('tools')
-				?.split(',')
-				.map((id) => id.trim())
-				.filter((id) => id);
-		} else if ($page.url.searchParams.get('tool-ids')) {
-			selectedToolIds = $page.url.searchParams
-				.get('tool-ids')
-				?.split(',')
-				.map((id) => id.trim())
-				.filter((id) => id);
 		}
 
 		if ($page.url.searchParams.get('call') === 'true') {

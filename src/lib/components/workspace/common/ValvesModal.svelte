@@ -10,7 +10,6 @@
 		getFunctionValvesSpecById,
 		updateFunctionValvesById
 	} from '$lib/apis/functions';
-	import { getToolValvesById, getToolValvesSpecById, updateToolValvesById } from '$lib/apis/tools';
 	import Spinner from '../../common/Spinner.svelte';
 	import Switch from '$lib/components/common/Switch.svelte';
 	import Valves from '$lib/components/common/Valves.svelte';
@@ -20,7 +19,6 @@
 
 	export let show = false;
 
-	export let type = 'tool';
 	export let id = null;
 
 	let saving = false;
@@ -42,16 +40,6 @@
 
 			let res = null;
 
-			if (type === 'tool') {
-				res = await updateToolValvesById(localStorage.token, id, valves).catch((error) => {
-					toast.error(error);
-				});
-			} else if (type === 'function') {
-				res = await updateFunctionValvesById(localStorage.token, id, valves).catch((error) => {
-					toast.error(error);
-				});
-			}
-
 			if (res) {
 				toast.success('Valves updated successfully');
 				dispatch('save');
@@ -65,14 +53,6 @@
 		loading = true;
 		valves = {};
 		valvesSpec = null;
-
-		if (type === 'tool') {
-			valves = await getToolValvesById(localStorage.token, id);
-			valvesSpec = await getToolValvesSpecById(localStorage.token, id);
-		} else if (type === 'function') {
-			valves = await getFunctionValvesById(localStorage.token, id);
-			valvesSpec = await getFunctionValvesSpecById(localStorage.token, id);
-		}
 
 		if (!valves) {
 			valves = {};
