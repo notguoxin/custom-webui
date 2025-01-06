@@ -169,10 +169,6 @@
 		console.log('saveSessionSelectedModels', selectedModels, sessionStorage.selectedModels);
 	};
 
-	$: if (selectedModels) {
-		setToolIds();
-	}
-
 	const showMessage = async (message) => {
 		const _chatId = JSON.parse(JSON.stringify($chatId));
 		let _messageId = JSON.parse(JSON.stringify(message.id));
@@ -365,12 +361,10 @@
 				const input = JSON.parse(localStorage.getItem(`chat-input-${chatIdProp}`));
 				prompt = input.prompt;
 				files = input.files;
-				selectedToolIds = input.selectedToolIds;
 				webSearchEnabled = input.webSearchEnabled;
 			} catch (e) {
 				prompt = '';
 				files = [];
-				selectedToolIds = [];
 				webSearchEnabled = false;
 			}
 		}
@@ -1780,7 +1774,6 @@
 								bind:files
 								bind:prompt
 								bind:autoScroll
-								bind:selectedToolIds
 								bind:webSearchEnabled
 								bind:atSelectedModel
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
@@ -1830,7 +1823,6 @@
 								bind:files
 								bind:prompt
 								bind:autoScroll
-								bind:selectedToolIds
 								bind:webSearchEnabled
 								bind:atSelectedModel
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
