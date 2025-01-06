@@ -28,7 +28,6 @@
 	import InputMenu from './MessageInput/InputMenu.svelte';
 	import Headphone from '../icons/Headphone.svelte';
 	import FileItem from '../common/FileItem.svelte';
-	import Commands from './MessageInput/Commands.svelte';
 	import XMark from '../icons/XMark.svelte';
 	import RichTextInput from '../common/RichTextInput.svelte';
 	import { generateAutoCompletion } from '$lib/apis';
