@@ -1145,7 +1145,6 @@
 								</div>
 							</div>
 						</form>
-					{/if}
 				</div>
 			</div>
 		</div>
