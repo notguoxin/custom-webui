@@ -7,7 +7,6 @@
 	import Database from './Settings/Database.svelte';
 
 	import General from './Settings/General.svelte';
-	import Images from './Settings/Images.svelte';
 	import Interface from './Settings/Interface.svelte';
 	import Models from './Settings/Models.svelte';
 	import Connections from './Settings/Connections.svelte';
@@ -233,7 +232,6 @@
 					/>
 				</svg>
 			</div>
-			<div class=" self-center">{$i18n.t('Images')}</div>
 		</button>
 
 		<button
@@ -314,12 +312,6 @@
 			<Models />
 		{:else if selectedTab === 'interface'}
 			<Interface
-				on:save={() => {
-					toast.success($i18n.t('Settings saved successfully!'));
-				}}
-			/>
-		{:else if selectedTab === 'images'}
-			<Images
 				on:save={() => {
 					toast.success($i18n.t('Settings saved successfully!'));
 				}}
