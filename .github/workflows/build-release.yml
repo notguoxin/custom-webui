@@ -34,6 +34,8 @@ jobs:
             echo curl -L -o %TEMP_DIR%\\install.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v${VERSION}.zip >> install.bat
             echo pip install --upgrade %TEMP_DIR%\\install.zip >> install.bat
             echo del /s /f /q %TEMP_DIR%\\install.zip >> install.bat
+            echo timeout /T 5 >> install.bat
+            echo exit >> install.bat
 
       - name: Create GitHub release
         uses: actions/github-script@v7
