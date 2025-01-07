@@ -15,7 +15,6 @@ from open_webui.env import (
     DATA_DIR,
     ENV,
     FRONTEND_BUILD_DIR,
-    WEBUI_AUTH,
     WEBUI_FAVICON_URL,
     WEBUI_NAME,
     log,
@@ -236,230 +235,13 @@ ENABLE_API_KEY_ENDPOINT_RESTRICTIONS = PersistentConfig(
 API_KEY_ALLOWED_ENDPOINTS = PersistentConfig(
     "API_KEY_ALLOWED_ENDPOINTS",
     "auth.api_key.allowed_endpoints",
-    os.environ.get("API_KEY_ALLOWED_ENDPOINTS", ""),
+    "",
 )
 
 
 JWT_EXPIRES_IN = PersistentConfig(
-    "JWT_EXPIRES_IN", "auth.jwt_expiry", os.environ.get("JWT_EXPIRES_IN", "-1")
+    "JWT_EXPIRES_IN", "auth.jwt_expiry", "-1"
 )
-
-####################################
-# OAuth config
-####################################
-
-ENABLE_OAUTH_SIGNUP = PersistentConfig(
-    "ENABLE_OAUTH_SIGNUP",
-    "oauth.enable_signup",
-    os.environ.get("ENABLE_OAUTH_SIGNUP", "False").lower() == "true",
-)
-
-OAUTH_MERGE_ACCOUNTS_BY_EMAIL = PersistentConfig(
-    "OAUTH_MERGE_ACCOUNTS_BY_EMAIL",
-    "oauth.merge_accounts_by_email",
-    os.environ.get("OAUTH_MERGE_ACCOUNTS_BY_EMAIL", "False").lower() == "true",
-)
-
-OAUTH_PROVIDERS = {}
-
-GOOGLE_CLIENT_ID = PersistentConfig(
-    "GOOGLE_CLIENT_ID",
-    "oauth.google.client_id",
-    os.environ.get("GOOGLE_CLIENT_ID", ""),
-)
-
-GOOGLE_CLIENT_SECRET = PersistentConfig(
-    "GOOGLE_CLIENT_SECRET",
-    "oauth.google.client_secret",
-    os.environ.get("GOOGLE_CLIENT_SECRET", ""),
-)
-
-
-GOOGLE_OAUTH_SCOPE = PersistentConfig(
-    "GOOGLE_OAUTH_SCOPE",
-    "oauth.google.scope",
-    os.environ.get("GOOGLE_OAUTH_SCOPE", "openid email profile"),
-)
-
-GOOGLE_REDIRECT_URI = PersistentConfig(
-    "GOOGLE_REDIRECT_URI",
-    "oauth.google.redirect_uri",
-    os.environ.get("GOOGLE_REDIRECT_URI", ""),
-)
-
-MICROSOFT_CLIENT_ID = PersistentConfig(
-    "MICROSOFT_CLIENT_ID",
-    "oauth.microsoft.client_id",
-    os.environ.get("MICROSOFT_CLIENT_ID", ""),
-)
-
-MICROSOFT_CLIENT_SECRET = PersistentConfig(
-    "MICROSOFT_CLIENT_SECRET",
-    "oauth.microsoft.client_secret",
-    os.environ.get("MICROSOFT_CLIENT_SECRET", ""),
-)
-
-MICROSOFT_CLIENT_TENANT_ID = PersistentConfig(
-    "MICROSOFT_CLIENT_TENANT_ID",
-    "oauth.microsoft.tenant_id",
-    os.environ.get("MICROSOFT_CLIENT_TENANT_ID", ""),
-)
-
-MICROSOFT_OAUTH_SCOPE = PersistentConfig(
-    "MICROSOFT_OAUTH_SCOPE",
-    "oauth.microsoft.scope",
-    os.environ.get("MICROSOFT_OAUTH_SCOPE", "openid email profile"),
-)
-
-MICROSOFT_REDIRECT_URI = PersistentConfig(
-    "MICROSOFT_REDIRECT_URI",
-    "oauth.microsoft.redirect_uri",
-    os.environ.get("MICROSOFT_REDIRECT_URI", ""),
-)
-
-OAUTH_CLIENT_ID = PersistentConfig(
-    "OAUTH_CLIENT_ID",
-    "oauth.oidc.client_id",
-    os.environ.get("OAUTH_CLIENT_ID", ""),
-)
-
-OAUTH_CLIENT_SECRET = PersistentConfig(
-    "OAUTH_CLIENT_SECRET",
-    "oauth.oidc.client_secret",
-    os.environ.get("OAUTH_CLIENT_SECRET", ""),
-)
-
-OPENID_PROVIDER_URL = PersistentConfig(
-    "OPENID_PROVIDER_URL",
-    "oauth.oidc.provider_url",
-    os.environ.get("OPENID_PROVIDER_URL", ""),
-)
-
-OPENID_REDIRECT_URI = PersistentConfig(
-    "OPENID_REDIRECT_URI",
-    "oauth.oidc.redirect_uri",
-    os.environ.get("OPENID_REDIRECT_URI", ""),
-)
-
-OAUTH_SCOPES = PersistentConfig(
-    "OAUTH_SCOPES",
-    "oauth.oidc.scopes",
-    os.environ.get("OAUTH_SCOPES", "openid email profile"),
-)
-
-OAUTH_PROVIDER_NAME = PersistentConfig(
-    "OAUTH_PROVIDER_NAME",
-    "oauth.oidc.provider_name",
-    os.environ.get("OAUTH_PROVIDER_NAME", "SSO"),
-)
-
-OAUTH_USERNAME_CLAIM = PersistentConfig(
-    "OAUTH_USERNAME_CLAIM",
-    "oauth.oidc.username_claim",
-    os.environ.get("OAUTH_USERNAME_CLAIM", "name"),
-)
-
-OAUTH_PICTURE_CLAIM = PersistentConfig(
-    "OAUTH_PICTURE_CLAIM",
-    "oauth.oidc.avatar_claim",
-    os.environ.get("OAUTH_PICTURE_CLAIM", "picture"),
-)
-
-OAUTH_EMAIL_CLAIM = PersistentConfig(
-    "OAUTH_EMAIL_CLAIM",
-    "oauth.oidc.email_claim",
-    os.environ.get("OAUTH_EMAIL_CLAIM", "email"),
-)
-
-OAUTH_GROUPS_CLAIM = PersistentConfig(
-    "OAUTH_GROUPS_CLAIM",
-    "oauth.oidc.group_claim",
-    os.environ.get("OAUTH_GROUP_CLAIM", "groups"),
-)
-
-ENABLE_OAUTH_ROLE_MANAGEMENT = PersistentConfig(
-    "ENABLE_OAUTH_ROLE_MANAGEMENT",
-    "oauth.enable_role_mapping",
-    os.environ.get("ENABLE_OAUTH_ROLE_MANAGEMENT", "False").lower() == "true",
-)
-
-ENABLE_OAUTH_GROUP_MANAGEMENT = PersistentConfig(
-    "ENABLE_OAUTH_GROUP_MANAGEMENT",
-    "oauth.enable_group_mapping",
-    os.environ.get("ENABLE_OAUTH_GROUP_MANAGEMENT", "False").lower() == "true",
-)
-
-OAUTH_ROLES_CLAIM = PersistentConfig(
-    "OAUTH_ROLES_CLAIM",
-    "oauth.roles_claim",
-    os.environ.get("OAUTH_ROLES_CLAIM", "roles"),
-)
-
-OAUTH_ALLOWED_ROLES = PersistentConfig(
-    "OAUTH_ALLOWED_ROLES",
-    "oauth.allowed_roles",
-    [
-        role.strip()
-        for role in os.environ.get("OAUTH_ALLOWED_ROLES", "user,admin").split(",")
-    ],
-)
-
-OAUTH_ADMIN_ROLES = PersistentConfig(
-    "OAUTH_ADMIN_ROLES",
-    "oauth.admin_roles",
-    [role.strip() for role in os.environ.get("OAUTH_ADMIN_ROLES", "admin").split(",")],
-)
-
-OAUTH_ALLOWED_DOMAINS = PersistentConfig(
-    "OAUTH_ALLOWED_DOMAINS",
-    "oauth.allowed_domains",
-    [
-        domain.strip()
-        for domain in os.environ.get("OAUTH_ALLOWED_DOMAINS", "*").split(",")
-    ],
-)
-
-
-def load_oauth_providers():
-    OAUTH_PROVIDERS.clear()
-    if GOOGLE_CLIENT_ID.value and GOOGLE_CLIENT_SECRET.value:
-        OAUTH_PROVIDERS["google"] = {
-            "client_id": GOOGLE_CLIENT_ID.value,
-            "client_secret": GOOGLE_CLIENT_SECRET.value,
-            "server_metadata_url": "https://accounts.google.com/.well-known/openid-configuration",
-            "scope": GOOGLE_OAUTH_SCOPE.value,
-            "redirect_uri": GOOGLE_REDIRECT_URI.value,
-        }
-
-    if (
-        MICROSOFT_CLIENT_ID.value
-        and MICROSOFT_CLIENT_SECRET.value
-        and MICROSOFT_CLIENT_TENANT_ID.value
-    ):
-        OAUTH_PROVIDERS["microsoft"] = {
-            "client_id": MICROSOFT_CLIENT_ID.value,
-            "client_secret": MICROSOFT_CLIENT_SECRET.value,
-            "server_metadata_url": f"https://login.microsoftonline.com/{MICROSOFT_CLIENT_TENANT_ID.value}/v2.0/.well-known/openid-configuration",
-            "scope": MICROSOFT_OAUTH_SCOPE.value,
-            "redirect_uri": MICROSOFT_REDIRECT_URI.value,
-        }
-
-    if (
-        OAUTH_CLIENT_ID.value
-        and OAUTH_CLIENT_SECRET.value
-        and OPENID_PROVIDER_URL.value
-    ):
-        OAUTH_PROVIDERS["oidc"] = {
-            "client_id": OAUTH_CLIENT_ID.value,
-            "client_secret": OAUTH_CLIENT_SECRET.value,
-            "server_metadata_url": OPENID_PROVIDER_URL.value,
-            "scope": OAUTH_SCOPES.value,
-            "name": OAUTH_PROVIDER_NAME.value,
-            "redirect_uri": OPENID_REDIRECT_URI.value,
-        }
-
-
-load_oauth_providers()
 
 ####################################
 # Static DIR
@@ -538,14 +320,6 @@ if CUSTOM_NAME:
 STORAGE_PROVIDER = os.environ.get("STORAGE_PROVIDER", "")  # defaults to local, s3
 
 ####################################
-# File Upload DIR
-####################################
-
-UPLOAD_DIR = f"{DATA_DIR}/uploads"
-Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
-
-
-####################################
 # Cache DIR
 ####################################
 
@@ -559,7 +333,7 @@ Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
 ENABLE_OLLAMA_API = PersistentConfig(
     "ENABLE_OLLAMA_API",
     "ollama.enable",
-    os.environ.get("ENABLE_OLLAMA_API", "True").lower() == "true",
+    True,
 )
 
 OLLAMA_API_BASE_URL = os.environ.get(
@@ -623,11 +397,7 @@ WEBUI_URL = PersistentConfig(
 ENABLE_SIGNUP = PersistentConfig(
     "ENABLE_SIGNUP",
     "ui.enable_signup",
-    (
-        False
-        if not WEBUI_AUTH
-        else os.environ.get("ENABLE_SIGNUP", "True").lower() == "true"
-    ),
+    False,
 )
 
 ENABLE_LOGIN_FORM = PersistentConfig(
@@ -650,35 +420,7 @@ DEFAULT_MODELS = PersistentConfig(
 DEFAULT_PROMPT_SUGGESTIONS = PersistentConfig(
     "DEFAULT_PROMPT_SUGGESTIONS",
     "ui.prompt_suggestions",
-    [
-        {
-            "title": ["Help me study", "vocabulary for a college entrance exam"],
-            "content": "Help me study vocabulary: write a sentence for me to fill in the blank, and I'll try to pick the correct option.",
-        },
-        {
-            "title": ["Give me ideas", "for what to do with my kids' art"],
-            "content": "What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter.",
-        },
-        {
-            "title": ["Tell me a fun fact", "about the Roman Empire"],
-            "content": "Tell me a random fun fact about the Roman Empire",
-        },
-        {
-            "title": ["Show me a code snippet", "of a website's sticky header"],
-            "content": "Show me a code snippet of a website's sticky header in CSS and JavaScript.",
-        },
-        {
-            "title": [
-                "Explain options trading",
-                "if I'm familiar with buying and selling stocks",
-            ],
-            "content": "Explain options trading in simple terms if I'm familiar with buying and selling stocks.",
-        },
-        {
-            "title": ["Overcome procrastination", "give me tips"],
-            "content": "Could you start by asking me about instances when I procrastinate the most and then give me some suggestions to overcome it?",
-        },
-    ],
+    [],
 )
 
 MODEL_ORDER_LIST = PersistentConfig(
@@ -690,7 +432,7 @@ MODEL_ORDER_LIST = PersistentConfig(
 DEFAULT_USER_ROLE = PersistentConfig(
     "DEFAULT_USER_ROLE",
     "ui.default_user_role",
-    os.getenv("DEFAULT_USER_ROLE", "pending"),
+    "pending"
 )
 
 USER_PERMISSIONS_WORKSPACE_MODELS_ACCESS = (
@@ -771,9 +513,7 @@ WEBHOOK_URL = PersistentConfig(
 
 ENABLE_ADMIN_EXPORT = False
 
-ENABLE_ADMIN_CHAT_ACCESS = (
-    os.environ.get("ENABLE_ADMIN_CHAT_ACCESS", "True").lower() == "true"
-)
+ENABLE_ADMIN_CHAT_ACCESS = False
 
 ENABLE_COMMUNITY_SHARING = PersistentConfig(
     "ENABLE_COMMUNITY_SHARING",
