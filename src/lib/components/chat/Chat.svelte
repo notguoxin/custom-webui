@@ -1215,6 +1215,7 @@
 
 		if (chatInputElement) {
 			chatInputElement.style.height = '';
+			chatInputElement.innerHTML = '';
 		}
 
 		const _files = JSON.parse(JSON.stringify(files));
