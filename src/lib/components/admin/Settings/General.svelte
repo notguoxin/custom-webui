@@ -2,11 +2,6 @@
 	import { getBackendConfig } from '$lib/apis';
 	import {
 		getAdminConfig,
-		getLdapConfig,
-		getLdapServer,
-		updateAdminConfig,
-		updateLdapConfig,
-		updateLdapServer
 	} from '$lib/apis/auths';
 	import SensitiveInput from '$lib/components/common/SensitiveInput.svelte';
 	import Switch from '$lib/components/common/Switch.svelte';
@@ -21,36 +16,8 @@
 
 	let adminConfig = null;
 
-	// LDAP
-	let ENABLE_LDAP = false;
-	let LDAP_SERVER = {
-		label: '',
-		host: '',
-		port: '',
-		attribute_for_username: 'uid',
-		app_dn: '',
-		app_dn_password: '',
-		search_base: '',
-		search_filters: '',
-		use_tls: false,
-		certificate_path: '',
-		ciphers: ''
-	};
-
-	const updateLdapServerHandler = async () => {
-		if (!ENABLE_LDAP) return;
-		const res = await updateLdapServer(localStorage.token, LDAP_SERVER).catch((error) => {
-			toast.error(error);
-			return null;
-		});
-		if (res) {
-			toast.success($i18n.t('LDAP server updated'));
-		}
-	};
-
 	const updateHandler = async () => {
 		const res = await updateAdminConfig(localStorage.token, adminConfig);
-		await updateLdapServerHandler();
 
 		if (res) {
 			saveHandler();
@@ -63,14 +30,8 @@
 		await Promise.all([
 			(async () => {
 				adminConfig = await getAdminConfig(localStorage.token);
-			})(),
-			(async () => {
-				LDAP_SERVER = await getLdapServer(localStorage.token);
 			})()
 		]);
-
-		const ldapConfig = await getLdapConfig(localStorage.token);
-		ENABLE_LDAP = ldapConfig.ENABLE_LDAP;
 	});
 </script>
 

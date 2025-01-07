@@ -41,7 +41,6 @@ dependencies = [
     "APScheduler==3.10.4",
 
     "anthropic",
-    "google-generativeai==0.7.2",
     "tiktoken",
 
     "langchain==0.3.7",
@@ -59,7 +58,6 @@ dependencies = [
     "einops==0.8.0",
 
     "ftfy==6.2.3",
-    "pypdf==4.3.1",
     "fpdf2==2.8.2",
     "pymdown-extensions==10.11.2",
     "docx2txt==0.8",
@@ -88,20 +86,12 @@ dependencies = [
 
     "black==24.8.0",
     "langfuse==2.44.0",
-    "youtube-transcript-api==0.6.3",
-    "pytube==15.0.0",
 
     "extract_msg",
     "pydub",
     "duckduckgo-search~=6.3.5",
 
-    "docker~=7.1.0",
     "pytest~=8.3.2",
-    "pytest-docker~=3.1.1",
-
-    "googleapis-common-protos==1.63.2",
-
-    "ldap3==2.9.1"
 ]
 readme = "README.md"
 requires-python = ">= 3.11, < 3.13.0a1"

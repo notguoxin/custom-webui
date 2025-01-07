@@ -64,11 +64,6 @@ class SigninForm(BaseModel):
     password: str
 
 
-class LdapForm(BaseModel):
-    user: str
-    password: str
-
-
 class ProfileImageUrlForm(BaseModel):
     profile_image_url: str
 

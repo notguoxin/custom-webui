@@ -95,19 +95,6 @@ from open_webui.config import (
     DEFAULT_MODELS,
     MODEL_ORDER_LIST,
     EVALUATION_ARENA_MODELS,
-    # WebUI (LDAP)
-    ENABLE_LDAP,
-    LDAP_SERVER_LABEL,
-    LDAP_SERVER_HOST,
-    LDAP_SERVER_PORT,
-    LDAP_ATTRIBUTE_FOR_USERNAME,
-    LDAP_SEARCH_FILTERS,
-    LDAP_SEARCH_BASE,
-    LDAP_APP_DN,
-    LDAP_APP_PASSWORD,
-    LDAP_USE_TLS,
-    LDAP_CA_CERT_FILE,
-    LDAP_CIPHERS,
     # Misc
     ENV,
     CACHE_DIR,
@@ -280,20 +267,6 @@ app.state.config.ENABLE_MESSAGE_RATING = ENABLE_MESSAGE_RATING
 
 app.state.config.ENABLE_EVALUATION_ARENA_MODELS = ENABLE_EVALUATION_ARENA_MODELS
 app.state.config.EVALUATION_ARENA_MODELS = EVALUATION_ARENA_MODELS
-
-app.state.config.ENABLE_LDAP = ENABLE_LDAP
-app.state.config.LDAP_SERVER_LABEL = LDAP_SERVER_LABEL
-app.state.config.LDAP_SERVER_HOST = LDAP_SERVER_HOST
-app.state.config.LDAP_SERVER_PORT = LDAP_SERVER_PORT
-app.state.config.LDAP_ATTRIBUTE_FOR_USERNAME = LDAP_ATTRIBUTE_FOR_USERNAME
-app.state.config.LDAP_APP_DN = LDAP_APP_DN
-app.state.config.LDAP_APP_PASSWORD = LDAP_APP_PASSWORD
-app.state.config.LDAP_SEARCH_BASE = LDAP_SEARCH_BASE
-app.state.config.LDAP_SEARCH_FILTERS = LDAP_SEARCH_FILTERS
-app.state.config.LDAP_USE_TLS = LDAP_USE_TLS
-app.state.config.LDAP_CA_CERT_FILE = LDAP_CA_CERT_FILE
-app.state.config.LDAP_CIPHERS = LDAP_CIPHERS
-
 
 app.state.AUTH_TRUSTED_EMAIL_HEADER = WEBUI_AUTH_TRUSTED_EMAIL_HEADER
 app.state.AUTH_TRUSTED_NAME_HEADER = WEBUI_AUTH_TRUSTED_NAME_HEADER
@@ -629,7 +602,6 @@ async def get_app_config(request: Request):
         "features": {
             "auth": WEBUI_AUTH,
             "auth_trusted_header": bool(app.state.AUTH_TRUSTED_EMAIL_HEADER),
-            "enable_ldap": app.state.config.ENABLE_LDAP,
             "enable_api_key": app.state.config.ENABLE_API_KEY,
             "enable_signup": app.state.config.ENABLE_SIGNUP,
             "enable_login_form": app.state.config.ENABLE_LOGIN_FORM,
