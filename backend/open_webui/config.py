@@ -17,6 +17,7 @@ from open_webui.env import (
     FRONTEND_BUILD_DIR,
     WEBUI_FAVICON_URL,
     WEBUI_NAME,
+    WEBUI_AUTH,
     log,
     DATABASE_URL,
 )
@@ -248,6 +249,7 @@ JWT_EXPIRES_IN = PersistentConfig(
 ####################################
 
 STATIC_DIR = Path(os.getenv("STATIC_DIR", OPEN_WEBUI_DIR / "static")).resolve()
+UPLOAD_DIR = f"{OPEN_WEBUI_DIR}/uploads"
 
 frontend_favicon = FRONTEND_BUILD_DIR / "static" / "favicon.png"
 
