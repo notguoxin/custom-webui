@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main # or whatever branch you want to use
+      - main
 
 jobs:
   release:
@@ -25,7 +25,14 @@ jobs:
         run: |
           VERSION=$(jq -r '.version' package.json)
           echo "::set-output name=version::$VERSION"
-          
+
+      - name: Create batch script to download and install
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          echo @echo off > install.bat
+          echo curl -L -o %VERSION%.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v%VERSION%.zip >> install.bat
+          echo pip install %VERSION%.zip >> install.bat
+
       - name: Create GitHub release
         uses: actions/github-script@v7
         with:
@@ -40,7 +47,7 @@ jobs:
             })
             console.log(`Created release ${release.data.html_url}`)
 
-      - name: Upload package to GitHub release
+      - name: Upload artifacts to release
         uses: actions/upload-artifact@v4
         with:
           name: package
