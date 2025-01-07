@@ -145,11 +145,6 @@ async def chat_completed(request: Request, form_data: dict, user: Any):
 
     model = models[model_id]
 
-    try:
-        data = process_pipeline_outlet_filter(request, data, user, models)
-    except Exception as e:
-        return Exception(f"Error: {e}")
-
     __event_emitter__ = get_event_emitter(
         {
             "chat_id": data["chat_id"],

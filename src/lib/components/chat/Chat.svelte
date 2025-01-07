@@ -1823,7 +1823,6 @@
 			}}
 			title={$chatTitle}
 			bind:selectedModels
-			shareEnabled={!!history.currentId}
 			{initNewChat}
 		/>
 

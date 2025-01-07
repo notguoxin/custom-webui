@@ -42,7 +42,6 @@ from open_webui.utils.auth import (
     get_current_user,
     get_password_hash,
 )
-from open_webui.utils.webhook import post_webhook
 from open_webui.utils.access_control import get_permissions
 
 from typing import Optional, List
@@ -466,17 +465,6 @@ async def signup(request: Request, response: Response, form_data: SignupForm):
                 samesite=WEBUI_SESSION_COOKIE_SAME_SITE,
                 secure=WEBUI_SESSION_COOKIE_SECURE,
             )
-
-            if request.app.state.config.WEBHOOK_URL:
-                post_webhook(
-                    request.app.state.config.WEBHOOK_URL,
-                    WEBHOOK_MESSAGES.USER_SIGNUP(user.name),
-                    {
-                        "action": "signup",
-                        "message": WEBHOOK_MESSAGES.USER_SIGNUP(user.name),
-                        "user": user.model_dump_json(exclude_none=True),
-                    },
-                )
 
             user_permissions = get_permissions(
                 user.id, request.app.state.config.USER_PERMISSIONS

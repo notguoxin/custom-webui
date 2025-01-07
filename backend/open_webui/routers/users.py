@@ -204,19 +204,7 @@ class UserResponse(BaseModel):
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user_by_id(user_id: str, user=Depends(get_verified_user)):
-    # Check if user_id is a shared chat
     # If it is, get the user_id from the chat
-    if user_id.startswith("shared-"):
-        chat_id = user_id.replace("shared-", "")
-        chat = Chats.get_chat_by_id(chat_id)
-        if chat:
-            user_id = chat.user_id
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ERROR_MESSAGES.USER_NOT_FOUND,
-            )
-
     user = Users.get_user_by_id(user_id)
 
     if user:

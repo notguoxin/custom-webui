@@ -30,7 +30,6 @@
 
 	import ChatMenu from './ChatMenu.svelte';
 	import DeleteConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
-	import ShareChatModal from '$lib/components/chat/ShareChatModal.svelte';
 	import GarbageBin from '$lib/components/icons/GarbageBin.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import ArchiveBox from '$lib/components/icons/ArchiveBox.svelte';
@@ -63,7 +62,6 @@
 		}
 	};
 
-	let showShareChatModal = false;
 	let confirmEdit = false;
 
 	let chatTitle = title;
@@ -193,8 +191,6 @@
 
 	let showDeleteConfirm = false;
 </script>
-
-<ShareChatModal bind:show={showShareChatModal} chatId={id} />
 
 <DeleteConfirmDialog
 	bind:show={showDeleteConfirm}
@@ -355,9 +351,6 @@
 					chatId={id}
 					cloneChatHandler={() => {
 						cloneChatHandler(id);
-					}}
-					shareHandler={() => {
-						showShareChatModal = true;
 					}}
 					archiveChatHandler={() => {
 						archiveChatHandler(id);

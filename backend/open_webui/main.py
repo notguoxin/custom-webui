@@ -470,13 +470,6 @@ async def get_models(request: Request, user=Depends(get_verified_user)):
 
     models = await get_all_models(request)
 
-    # Filter out filter pipelines
-    models = [
-        model
-        for model in models
-        if "pipeline" not in model or model["pipeline"].get("type", None) != "filter"
-    ]
-
     model_order_list = request.app.state.config.MODEL_ORDER_LIST
     if model_order_list:
         model_order_dict = {model_id: i for i, model_id in enumerate(model_order_list)}
