@@ -509,10 +509,6 @@ DEFAULT_ARENA_MODEL = {
     },
 }
 
-WEBHOOK_URL = PersistentConfig(
-    "WEBHOOK_URL", "webhook_url", ""
-)
-
 ENABLE_ADMIN_EXPORT = False
 
 ENABLE_ADMIN_CHAT_ACCESS = False

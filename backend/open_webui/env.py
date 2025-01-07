@@ -88,7 +88,6 @@ log_sources = [
     "OLLAMA",
     "OPENAI",
     "RAG",
-    "WEBHOOK",
     "SOCKET",
 ]
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getBackendConfig, getWebhookUrl, updateWebhookUrl } from '$lib/apis';
+	import { getBackendConfig } from '$lib/apis';
 	import {
 		getAdminConfig,
 		getLdapConfig,
@@ -20,7 +20,6 @@
 	export let saveHandler: Function;
 
 	let adminConfig = null;
-	let webhookUrl = '';
 
 	// LDAP
 	let ENABLE_LDAP = false;
@@ -50,7 +49,6 @@
 	};
 
 	const updateHandler = async () => {
-		webhookUrl = await updateWebhookUrl(localStorage.token, webhookUrl);
 		const res = await updateAdminConfig(localStorage.token, adminConfig);
 		await updateLdapServerHandler();
 
@@ -65,10 +63,6 @@
 		await Promise.all([
 			(async () => {
 				adminConfig = await getAdminConfig(localStorage.token);
-			})(),
-
-			(async () => {
-				webhookUrl = await getWebhookUrl(localStorage.token);
 			})(),
 			(async () => {
 				LDAP_SERVER = await getLdapServer(localStorage.token);
