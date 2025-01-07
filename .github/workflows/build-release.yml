@@ -38,14 +38,28 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const fs = require('fs');
+            const path = require('path');
             const release = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `v${{ steps.get_version.outputs.version }}`,
               name: `v${{ steps.get_version.outputs.version }}`,
-              body: "",
-            })
-            console.log(`Created release ${release.data.html_url}`)
+              body: "Automated release",
+            });
+            const uploadUrl = release.data.upload_url;
+            const filePath = path.resolve('./install.bat');
+            const stat = fs.statSync(filePath);
+            await github.rest.repos.uploadReleaseAsset({
+              url: uploadUrl,
+              headers: {
+                'content-length': stat.size,
+                'content-type': 'application/octet-stream',
+              },
+              name: 'install.bat',
+              data: fs.readFileSync(filePath),
+            });
+            console.log(`Created release ${release.data.html_url}`);
 
       - name: Upload artifacts to release
         uses: actions/upload-artifact@v4
