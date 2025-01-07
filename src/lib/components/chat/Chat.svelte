@@ -1215,6 +1215,7 @@
 
 		if (chatInputElement) {
 			chatInputElement.style.height = '';
+			chatInputElement.value = '';
 			chatInputElement.innerHTML = '';
 		}
 
