@@ -37,9 +37,6 @@ from open_webui.models.users import UserModel
 from open_webui.models.functions import Functions
 from open_webui.models.models import Models
 
-from open_webui.retrieval.utils import get_sources_from_files
-
-
 from open_webui.utils.chat import generate_chat_completion
 from open_webui.utils.task import (
     get_task_model_id,
@@ -345,50 +342,6 @@ async def chat_completion_files_handler(
     request: Request, body: dict, user: UserModel
 ) -> tuple[dict, dict[str, list]]:
     sources = []
-
-    if files := body.get("metadata", {}).get("files", None):
-        try:
-            queries_response = await generate_queries(
-                request,
-                {
-                    "model": body["model"],
-                    "messages": body["messages"],
-                    "type": "retrieval",
-                },
-                user,
-            )
-            queries_response = queries_response["choices"][0]["message"]["content"]
-
-            try:
-                bracket_start = queries_response.find("{")
-                bracket_end = queries_response.rfind("}") + 1
-
-                if bracket_start == -1 or bracket_end == -1:
-                    raise Exception("No JSON object found in the response")
-
-                queries_response = queries_response[bracket_start:bracket_end]
-                queries_response = json.loads(queries_response)
-            except Exception as e:
-                queries_response = {"queries": [queries_response]}
-
-            queries = queries_response.get("queries", [])
-        except Exception as e:
-            queries = []
-
-        if len(queries) == 0:
-            queries = [get_last_user_message(body["messages"])]
-
-        sources = get_sources_from_files(
-            files=files,
-            queries=queries,
-            embedding_function=request.app.state.EMBEDDING_FUNCTION,
-            k=request.app.state.config.TOP_K,
-            reranking_function=request.app.state.rf,
-            r=request.app.state.config.RELEVANCE_THRESHOLD,
-            hybrid_search=request.app.state.config.ENABLE_RAG_HYBRID_SEARCH,
-        )
-
-        log.debug(f"rag_contexts:sources: {sources}")
     return body, {"sources": sources}
 
 
