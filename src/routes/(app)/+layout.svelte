@@ -27,13 +27,11 @@
 		tags,
 		banners,
 		showSettings,
-		showChangelog,
 		temporaryChatEnabled
 	} from '$lib/stores';
 
 	import Sidebar from '$lib/components/layout/Sidebar.svelte';
 	import SettingsModal from '$lib/components/chat/SettingsModal.svelte';
-	import ChangelogModal from '$lib/components/ChangelogModal.svelte';
 	import AccountPending from '$lib/components/layout/Overlay/AccountPending.svelte';
 	import UpdateInfoToast from '$lib/components/layout/UpdateInfoToast.svelte';
 
@@ -170,10 +168,6 @@
 				}
 			});
 
-			if ($user.role === 'admin' && ($settings?.showChangelog ?? true)) {
-				showChangelog.set($settings?.version !== $config.version);
-			}
-
 			if ($page.url.searchParams.get('temporary-chat') === 'true') {
 				temporaryChatEnabled.set(true);
 			}
@@ -209,7 +203,6 @@
 </script>
 
 <SettingsModal bind:show={$showSettings} />
-<ChangelogModal bind:show={$showChangelog} />
 
 {#if version && compareVersion(version.latest, version.current) && ($settings?.showUpdateToast ?? true)}
 	<div class=" absolute bottom-8 right-8 z-50" in:fade={{ duration: 100 }}>

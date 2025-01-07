@@ -153,15 +153,10 @@ from open_webui.config import (
     reset_config,
 )
 from open_webui.env import (
-    CHANGELOG,
     GLOBAL_LOG_LEVEL,
-    SAFE_MODE,
     SRC_LOG_LEVELS,
     VERSION,
     WEBUI_BUILD_HASH,
-    WEBUI_SECRET_KEY,
-    WEBUI_SESSION_COOKIE_SAME_SITE,
-    WEBUI_SESSION_COOKIE_SECURE,
     WEBUI_AUTH_TRUSTED_EMAIL_HEADER,
     WEBUI_AUTH_TRUSTED_NAME_HEADER,
     ENABLE_WEBSOCKET_SUPPORT,
@@ -763,11 +758,6 @@ async def get_app_latest_release_version():
     except Exception as e:
         log.debug(e)
         return {"current": VERSION, "latest": VERSION}
-
-
-@app.get("/api/changelog")
-async def get_app_changelog():
-    return {key: CHANGELOG[key] for idx, key in enumerate(CHANGELOG) if idx < 5}
 
 @app.get("/manifest.json")
 async def get_manifest_json():
