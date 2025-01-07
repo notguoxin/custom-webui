@@ -30,7 +30,6 @@
 
 	let ENABLE_OLLAMA_API: null | boolean = null;
 
-	let pipelineUrls = {};
 	let showAddOllamaConnectionModal = false;
 
 	const updateOllamaHandler = async () => {

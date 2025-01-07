@@ -6,7 +6,7 @@ from langchain_core.documents import Document
 from open_webui.env import SRC_LOG_LEVELS
 
 log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
+log.setLevel(SRC_LOG_LEVELS["UNSPECIFIED"])
 
 ALLOWED_SCHEMES = {"http", "https"}
 ALLOWED_NETLOCS = {

@@ -6,7 +6,7 @@ from open_webui.env import SRC_LOG_LEVELS
 from yarl import URL
 
 log = logging.getLogger(__name__)
-log.setLevel(SRC_LOG_LEVELS["RAG"])
+log.setLevel(SRC_LOG_LEVELS["UNSPECIFIED"])
 
 
 def search_jina(api_key: str, query: str, count: int) -> list[SearchResult]:
