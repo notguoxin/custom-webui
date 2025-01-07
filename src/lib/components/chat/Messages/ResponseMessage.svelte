@@ -640,7 +640,6 @@
 										{history}
 										content={message.content}
 										sources={message.sources}
-										floatingButtons={message?.done}
 										save={!readOnly}
 										{model}
 										onSourceClick={(e) => {

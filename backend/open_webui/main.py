@@ -33,8 +33,6 @@ from fastapi import (
     BackgroundTasks,
 )
 
-from fastapi.openapi.docs import get_swagger_ui_html
-
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -75,20 +73,6 @@ from open_webui.config import (
     ENABLE_OLLAMA_API,
     OLLAMA_BASE_URLS,
     OLLAMA_API_CONFIGS,
-    # Retrieval
-    RAG_RELEVANCE_THRESHOLD,
-    RAG_FILE_MAX_COUNT,
-    RAG_FILE_MAX_SIZE,
-    RAG_OLLAMA_BASE_URL,
-    RAG_OLLAMA_API_KEY,
-    CHUNK_OVERLAP,
-    CHUNK_SIZE,
-    CONTENT_EXTRACTION_ENGINE,
-    TIKA_SERVER_URL,
-    RAG_TOP_K,
-    RAG_TEXT_SPLITTER,
-    TIKTOKEN_ENCODING_NAME,
-    PDF_EXTRACT_IMAGES,
     # WebUI
     WEBUI_AUTH,
     WEBUI_NAME,
@@ -316,36 +300,6 @@ app.state.config.LDAP_CIPHERS = LDAP_CIPHERS
 app.state.AUTH_TRUSTED_EMAIL_HEADER = WEBUI_AUTH_TRUSTED_EMAIL_HEADER
 app.state.AUTH_TRUSTED_NAME_HEADER = WEBUI_AUTH_TRUSTED_NAME_HEADER
 
-app.state.TOOLS = {}
-app.state.FUNCTIONS = {}
-
-
-########################################
-#
-# RETRIEVAL
-#
-########################################
-
-
-app.state.config.TOP_K = RAG_TOP_K
-app.state.config.RELEVANCE_THRESHOLD = RAG_RELEVANCE_THRESHOLD
-app.state.config.FILE_MAX_SIZE = RAG_FILE_MAX_SIZE
-app.state.config.FILE_MAX_COUNT = RAG_FILE_MAX_COUNT
-
-app.state.config.CONTENT_EXTRACTION_ENGINE = CONTENT_EXTRACTION_ENGINE
-app.state.config.TIKA_SERVER_URL = TIKA_SERVER_URL
-
-app.state.config.TEXT_SPLITTER = RAG_TEXT_SPLITTER
-app.state.config.TIKTOKEN_ENCODING_NAME = TIKTOKEN_ENCODING_NAME
-
-app.state.config.CHUNK_SIZE = CHUNK_SIZE
-app.state.config.CHUNK_OVERLAP = CHUNK_OVERLAP
-
-app.state.config.RAG_OLLAMA_BASE_URL = RAG_OLLAMA_BASE_URL
-app.state.config.RAG_OLLAMA_API_KEY = RAG_OLLAMA_API_KEY
-
-app.state.config.PDF_EXTRACT_IMAGES = PDF_EXTRACT_IMAGES
-
 ########################################
 #
 # TASKS
@@ -356,10 +310,6 @@ app.state.config.PDF_EXTRACT_IMAGES = PDF_EXTRACT_IMAGES
 app.state.config.TASK_MODEL = TASK_MODEL
 app.state.config.TASK_MODEL_EXTERNAL = TASK_MODEL_EXTERNAL
 
-
-app.state.config.ENABLE_SEARCH_QUERY_GENERATION = ENABLE_SEARCH_QUERY_GENERATION
-app.state.config.ENABLE_RETRIEVAL_QUERY_GENERATION = ENABLE_RETRIEVAL_QUERY_GENERATION
-app.state.config.ENABLE_AUTOCOMPLETE_GENERATION = ENABLE_AUTOCOMPLETE_GENERATION
 app.state.config.ENABLE_TAGS_GENERATION = ENABLE_TAGS_GENERATION
 
 
@@ -700,10 +650,6 @@ async def get_app_config(request: Request):
             {
                 "default_models": app.state.config.DEFAULT_MODELS,
                 "default_prompt_suggestions": app.state.config.DEFAULT_PROMPT_SUGGESTIONS,
-                "file": {
-                    "max_size": app.state.config.FILE_MAX_SIZE,
-                    "max_count": app.state.config.FILE_MAX_COUNT,
-                },
                 "permissions": {**app.state.config.USER_PERMISSIONS},
             }
             if user is not None
@@ -798,19 +744,6 @@ async def healthcheck_with_db():
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.mount("/cache", StaticFiles(directory=CACHE_DIR), name="cache")
-
-
-def swagger_ui_html(*args, **kwargs):
-    return get_swagger_ui_html(
-        *args,
-        **kwargs,
-        swagger_js_url="/static/swagger-ui/swagger-ui-bundle.js",
-        swagger_css_url="/static/swagger-ui/swagger-ui.css",
-        swagger_favicon_url="/static/swagger-ui/favicon.png",
-    )
-
-
-applications.get_swagger_ui_html = swagger_ui_html
 
 if os.path.exists(FRONTEND_BUILD_DIR):
     mimetypes.add_type("text/javascript", ".js")
