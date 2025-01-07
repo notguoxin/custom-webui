@@ -221,7 +221,7 @@ print(
       \/            \/                   \/     \/       \/\/              \/                     \_/        \/ 
 
 
-v{VERSION} - modified by Guo Xin.
+v{VERSION} - modified by Guo Xin, made by Timothy Jaeryang Baek.
 {f"Commit: {WEBUI_BUILD_HASH}" if WEBUI_BUILD_HASH != "dev-build" else ""}
 https://github.com/notguoxin/custom-webui
 """
