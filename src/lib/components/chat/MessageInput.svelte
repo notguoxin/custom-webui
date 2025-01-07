@@ -721,7 +721,6 @@
 														}}
 														aria-label="Call"
 													>
-														<Headphone className="size-5" />
 													</button>
 												</Tooltip>
 											</div>
