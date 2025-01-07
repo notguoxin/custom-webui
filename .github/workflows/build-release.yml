@@ -31,9 +31,9 @@ jobs:
             VERSION=${{ steps.get_version.outputs.version }}
             echo @echo off > install.bat
             echo set TEMP_DIR=%TEMP% >> install.bat
-            echo curl -L -o %TEMP_DIR%\${VERSION}.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v${VERSION}.zip >> install.bat
-            echo pip install --upgrade %TEMP_DIR%\${VERSION}.zip >> install.bat
-            echo del /s /f /q %TEMP_DIR%\${VERSION}.zip >> install.bat
+            echo curl -L -o %%TEMP_DIR%%\${VERSION}.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v${VERSION}.zip >> install.bat
+            echo pip install --upgrade %%TEMP_DIR%%\${VERSION}.zip >> install.bat
+            echo del /s /f /q %%TEMP_DIR%%\${VERSION}.zip >> install.bat
 
       - name: Create GitHub release
         uses: actions/github-script@v7
