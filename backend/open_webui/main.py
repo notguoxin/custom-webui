@@ -128,10 +128,6 @@ from open_webui.config import (
     ENABLE_RETRIEVAL_QUERY_GENERATION,
     ENABLE_AUTOCOMPLETE_GENERATION,
     TITLE_GENERATION_PROMPT_TEMPLATE,
-    TAGS_GENERATION_PROMPT_TEMPLATE,
-    QUERY_GENERATION_PROMPT_TEMPLATE,
-    AUTOCOMPLETE_GENERATION_PROMPT_TEMPLATE,
-    AUTOCOMPLETE_GENERATION_INPUT_MAX_LENGTH,
     AppConfig,
     reset_config,
 )
@@ -145,7 +141,6 @@ from open_webui.env import (
     ENABLE_WEBSOCKET_SUPPORT,
     BYPASS_MODEL_ACCESS_CONTROL,
     RESET_CONFIG_ON_START,
-    OFFLINE_MODE,
 )
 
 
@@ -187,7 +182,7 @@ class SPAStaticFiles(StaticFiles):
                 raise ex
 
 
-print(
+logging.log(
     rf"""
   ___                    __        __   _     _   _ ___
  / _ \ _ __   ___ _ __   \ \      / /__| |__ | | | |_ _|
@@ -615,10 +610,6 @@ async def get_app_config(request: Request):
         "features": {
             "auth": WEBUI_AUTH,
             "auth_trusted_header": bool(app.state.AUTH_TRUSTED_EMAIL_HEADER),
-            "enable_ldap": app.state.config.ENABLE_LDAP,
-            "enable_api_key": app.state.config.ENABLE_API_KEY,
-            "enable_signup": app.state.config.ENABLE_SIGNUP,
-            "enable_login_form": app.state.config.ENABLE_LOGIN_FORM,
             "enable_websocket": ENABLE_WEBSOCKET_SUPPORT,
             **(
                 {
@@ -667,11 +658,6 @@ async def get_app_version():
 
 @app.get("/api/version/updates")
 async def get_app_latest_release_version():
-    if OFFLINE_MODE:
-        log.debug(
-            f"Offline mode is enabled, returning current version as latest version"
-        )
-        return {"current": VERSION, "latest": VERSION}
     try:
         timeout = aiohttp.ClientTimeout(total=1)
         async with aiohttp.ClientSession(timeout=timeout, trust_env=True) as session:
