@@ -223,7 +223,7 @@ print(
 
 v{VERSION} - modified by Guo Xin.
 {f"Commit: {WEBUI_BUILD_HASH}" if WEBUI_BUILD_HASH != "dev-build" else ""}
-https://github.com/notguoxin/open-webui
+https://github.com/notguoxin/custom-webui
 """
 )
 

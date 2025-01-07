@@ -59,7 +59,7 @@
 						</Tooltip>
 
 						<a
-							href="https://github.com/notguoxin/open-webui/releases/tag/v{version.latest}"
+							href="https://github.com/notguoxin/custom-webui/releases/tag/v{version.latest}"
 							target="_blank"
 						>
 							{updateAvailable === null
