@@ -44,3 +44,4 @@ Modified by [NotGuoXin](https://github.com/notguoxin)
 ---
 ## Foodnotes
 [^1]: However you can download and install using pip from getting the whl file from the release page
+    > `pip install open-webui-VERSION-py3-none-any.whl`
