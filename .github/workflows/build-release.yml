@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - build-ready
+      - main
 
 jobs:
   testfrontend:
@@ -30,9 +30,10 @@ jobs:
 
       - name: Build Frontend
         run: npm run build
+
   release:
     runs-on: ubuntu-latest
-
+    needs: testfrontend  # Ensure testfrontend job completes before running release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
