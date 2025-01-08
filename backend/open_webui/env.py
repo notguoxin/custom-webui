@@ -2,13 +2,10 @@ import importlib.metadata
 import json
 import logging
 import os
-import pkgutil
 import sys
 import shutil
 from pathlib import Path
 
-import markdown
-from bs4 import BeautifulSoup
 from open_webui.constants import ERROR_MESSAGES
 
 ####################################
@@ -88,6 +85,8 @@ log_sources = [
     "OLLAMA",
     "OPENAI",
     "SOCKET",
+    "RAG",
+
 ]
 
 SRC_LOG_LEVELS = {}
