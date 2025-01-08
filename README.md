@@ -1,5 +1,6 @@
 > [!WARNING]  
-> Not tested for production use.
+> Not tested for production use. \
+> May introduce bugs that is not present in the original [Open WebUI](https://github.com/open-webui/open-webui).
 
 # Custom WebUI 👋
 A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
@@ -27,6 +28,7 @@ A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-
     - Removed Channels
     - Removed Functions
     - Removed Playground
+    - Removed Pipelines
     - and more!
 
 ## License 📜
