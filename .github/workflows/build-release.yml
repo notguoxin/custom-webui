@@ -6,25 +6,30 @@ on:
       - main
 
 jobs:
-  checkpackagejsonchanges:
-    name: 'Check package.json changes'
+  check_tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check for package.json changes
-        id: check_changes
+      - name: Get version number from package.json
+        id: get_version
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep package.json
-        continue-on-error: true
-
-      - name: Set output
-        id: set_output
-        run: echo ::set-output name=changes::${{ steps.check_changes.outputs.stdout }}
+          VERSION=$(jq -r '.version' package.json)
+          echo "::set-output name=version::$VERSION"
+    
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag already exists"
+            exit 1
+          else
+            echo "Tag does not exist"
+            exit 0
+          fi
 
   testfrontend:
-    needs: checkpackagejsonchanges
     name: 'Format & Build Frontend'
     runs-on: ubuntu-latest
     continue-on-error: false  # This ensures the workflow fails if this step fails
