@@ -41,7 +41,6 @@ class Message(Base):
     id = Column(Text, primary_key=True)
 
     user_id = Column(Text)
-    channel_id = Column(Text, nullable=True)
 
     parent_id = Column(Text, nullable=True)
 
@@ -58,7 +57,6 @@ class MessageModel(BaseModel):
 
     id: str
     user_id: str
-    channel_id: Optional[str] = None
 
     parent_id: Optional[str] = None
 
@@ -96,7 +94,7 @@ class MessageResponse(MessageModel):
 
 class MessageTable:
     def insert_new_message(
-        self, form_data: MessageForm, channel_id: str, user_id: str
+        self, form_data: MessageForm, user_id: str
     ) -> Optional[MessageModel]:
         with get_db() as db:
             id = str(uuid.uuid4())
@@ -106,7 +104,6 @@ class MessageTable:
                 **{
                     "id": id,
                     "user_id": user_id,
-                    "channel_id": channel_id,
                     "parent_id": form_data.parent_id,
                     "content": form_data.content,
                     "data": form_data.data,
@@ -157,22 +154,8 @@ class MessageTable:
                 for message in db.query(Message).filter_by(parent_id=id).all()
             ]
 
-    def get_messages_by_channel_id(
-        self, channel_id: str, skip: int = 0, limit: int = 50
-    ) -> list[MessageModel]:
-        with get_db() as db:
-            all_messages = (
-                db.query(Message)
-                .filter_by(channel_id=channel_id, parent_id=None)
-                .order_by(Message.created_at.desc())
-                .offset(skip)
-                .limit(limit)
-                .all()
-            )
-            return [MessageModel.model_validate(message) for message in all_messages]
-
     def get_messages_by_parent_id(
-        self, channel_id: str, parent_id: str, skip: int = 0, limit: int = 50
+        self, parent_id: str, skip: int = 0, limit: int = 50
     ) -> list[MessageModel]:
         with get_db() as db:
             message = db.get(Message, parent_id)
@@ -182,7 +165,6 @@ class MessageTable:
 
             all_messages = (
                 db.query(Message)
-                .filter_by(channel_id=channel_id, parent_id=parent_id)
                 .order_by(Message.created_at.desc())
                 .offset(skip)
                 .limit(limit)

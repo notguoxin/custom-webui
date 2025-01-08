@@ -51,8 +51,6 @@
 	import Plus from '../icons/Plus.svelte';
 	import Tooltip from '../common/Tooltip.svelte';
 	import Folders from './Sidebar/Folders.svelte';
-	import ChannelModal from './Sidebar/ChannelModal.svelte';
-	import ChannelItem from './Sidebar/ChannelItem.svelte';
 	import PencilSquare from '../icons/PencilSquare.svelte';
 
 	const BREAKPOINT = 768;
@@ -65,8 +63,6 @@
 	let selectedChatId = null;
 	let showDropdown = false;
 	let showPinnedChat = true;
-
-	let showCreateChannel = false;
 
 	// Pagination variables
 	let chatListLoading = false;

@@ -462,12 +462,6 @@ USER_PERMISSIONS = PersistentConfig(
     },
 )
 
-ENABLE_CHANNELS = PersistentConfig(
-    "ENABLE_CHANNELS",
-    "channels.enable",
-    False,
-)
-
 
 ENABLE_EVALUATION_ARENA_MODELS = PersistentConfig(
     "ENABLE_EVALUATION_ARENA_MODELS",

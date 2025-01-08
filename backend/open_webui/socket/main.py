@@ -5,7 +5,6 @@ import sys
 import time
 
 from open_webui.models.users import Users, UserNameResponse
-from open_webui.models.channels import Channels
 from open_webui.models.chats import Chats
 
 from open_webui.env import (
@@ -158,66 +157,10 @@ async def user_join(sid, data):
     else:
         USER_POOL[user.id] = [sid]
 
-    # Join all the channels
-    channels = Channels.get_channels_by_user_id(user.id)
-    log.debug(f"{channels=}")
-    for channel in channels:
-        await sio.enter_room(sid, f"channel:{channel.id}")
-
     # print(f"user {user.name}({user.id}) connected with session ID {sid}")
 
     await sio.emit("user-list", {"user_ids": list(USER_POOL.keys())})
     return {"id": user.id, "name": user.name}
-
-
-@sio.on("join-channels")
-async def join_channel(sid, data):
-    auth = data["auth"] if "auth" in data else None
-    if not auth or "token" not in auth:
-        return
-
-    data = decode_token(auth["token"])
-    if data is None or "id" not in data:
-        return
-
-    user = Users.get_user_by_id(data["id"])
-    if not user:
-        return
-
-    # Join all the channels
-    channels = Channels.get_channels_by_user_id(user.id)
-    log.debug(f"{channels=}")
-    for channel in channels:
-        await sio.enter_room(sid, f"channel:{channel.id}")
-
-
-@sio.on("channel-events")
-async def channel_events(sid, data):
-    room = f"channel:{data['channel_id']}"
-    participants = sio.manager.get_participants(
-        namespace="/",
-        room=room,
-    )
-
-    sids = [sid for sid, _ in participants]
-    if sid not in sids:
-        return
-
-    event_data = data["data"]
-    event_type = event_data["type"]
-
-    if event_type == "typing":
-        await sio.emit(
-            "channel-events",
-            {
-                "channel_id": data["channel_id"],
-                "message_id": data.get("message_id", None),
-                "data": event_data,
-                "user": UserNameResponse(**SESSION_POOL[sid]).model_dump(),
-            },
-            room=room,
-        )
-
 
 @sio.on("user-list")
 async def user_list(sid):
