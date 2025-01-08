@@ -17,13 +17,22 @@ jobs:
         run: |
           VERSION=$(jq -r '.version' package.json)
           echo "::set-output name=version::$VERSION"
-    
-      - uses: mukunku/tag-exists-action@v1.6.0
+      
+      - name: Check if tag exists
+        uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
         with: 
           tag: ${{ steps.get_version.outputs.version }}
           repo: 'actions/checkout'
+        
+      - name: Exit if tag exists
+        run: |
+          if [ ${{ steps.check-tag.outputs.exists }} == "true" ]; then
+            echo "Tag already exists"
+            exit 1
+          fi
 
+      
   testfrontend:
     name: 'Format & Build Frontend'
     runs-on: ubuntu-latest
