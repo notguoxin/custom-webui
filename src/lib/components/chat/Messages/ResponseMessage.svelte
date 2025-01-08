@@ -261,8 +261,6 @@
 		await tick();
 
 		if (!details) {
-			showRateComment = true;
-
 			if (!updatedMessage.annotation?.tags) {
 				// attempt to generate tags
 				const tags = await generateTags(localStorage.token, message.model, messages, chatId).catch(
@@ -722,7 +720,6 @@
 												? 'visible'
 												: 'invisible group-hover:visible'} p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg dark:hover:text-white hover:text-black transition regenerate-response-button"
 											on:click={() => {
-												showRateComment = false;
 												regenerateResponse(message);
 
 												(model?.actions ?? []).forEach((action) => {
