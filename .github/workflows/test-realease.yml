@@ -1,4 +1,4 @@
-name: Release
+name: Test
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  testfrontend:
+  test_frontend:
     name: 'Format & Build Frontend'
     runs-on: ubuntu-latest
     continue-on-error: false  # This ensures the workflow fails if this step fails
@@ -31,7 +31,7 @@ jobs:
       - name: Build Frontend
         run: npm run build
 
-  release:
+  test_release:
     runs-on: ubuntu-latest
     needs: [testfrontend]
     steps:
