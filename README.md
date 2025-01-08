@@ -1,3 +1,6 @@
+> [!WARNING]  
+> Not tested for production use.
+
 # Custom WebUI 👋
 A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
 
