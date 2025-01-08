@@ -6,7 +6,25 @@ on:
       - main
 
 jobs:
+  checkpackagejsonchanges:
+    name: 'Check package.json changes'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check for package.json changes
+        id: check_changes
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep package.json
+        continue-on-error: true
+
+      - name: Set output
+        id: set_output
+        run: echo ::set-output name=changes::${{ steps.check_changes.outputs.stdout }}
+
   testfrontend:
+    needs: checkpackagejsonchanges
     name: 'Format & Build Frontend'
     runs-on: ubuntu-latest
     continue-on-error: false  # This ensures the workflow fails if this step fails
@@ -38,13 +56,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check for changes in package.json
-        run: |
-          git diff --cached --diff-filter=d package.json || {
-            echo "No changes to package.json"
-            exit 1
-          }
-
       - name: Get version number from package.json
         id: get_version
         run: |
@@ -60,6 +71,7 @@ jobs:
           python-version: 3.11
       
       - name: Clean npm cache
+        id: clean_cache
         run: npm cache clean --force
         
       - name: Build
@@ -67,6 +79,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install build
           python -m build .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.clean_cache.conclusion == 'success'
 
       - name: Create GitHub release
         uses: actions/github-script@v7
