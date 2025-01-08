@@ -23,7 +23,6 @@ jobs:
         id: check-tag
         with: 
           tag: ${{ steps.get_version.outputs.version }}
-          repo: 'actions/checkout'
         
       - name: Exit if tag exists
         run: |
