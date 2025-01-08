@@ -229,7 +229,6 @@
 					: {})
 			},
 			meta: {
-				arena: message ? message.arena : false,
 				model_id: message.model,
 				message_id: message.id,
 				message_index: messages.length,

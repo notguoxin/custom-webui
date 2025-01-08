@@ -79,11 +79,7 @@
 		const baseModel = $models.find((m) => m.id === base_model_id);
 
 		if (baseModel) {
-			if (baseModel.owned_by === 'openai') {
-				capabilities.usage = baseModel?.meta?.capabilities?.usage ?? false;
-			} else {
-				delete capabilities.usage;
-			}
+			delete capabilities.usage;
 			capabilities = capabilities;
 		}
 	};
@@ -134,7 +130,7 @@
 
 			if (model.base_model_id) {
 				const base_model = $models
-					.filter((m) => !m?.preset && !(m?.arena ?? false))
+					.filter((m) => !m?.preset)
 					.find((m) => [model.base_model_id, `${model.base_model_id}:latest`].includes(m.id));
 
 				console.log('base_model', base_model);
@@ -397,7 +393,7 @@
 									<option value={null} class=" text-gray-900"
 										>{$i18n.t('Select a base model')}</option
 									>
-									{#each $models.filter((m) => (model ? m.id !== model.id : true) && !m?.preset && m?.owned_by !== 'arena') as model}
+									{#each $models.filter((m) => (model ? m.id !== model.id : true) && !m?.preset) as model}
 										<option value={model.id} class=" text-gray-900">{model.name}</option>
 									{/each}
 								</select>
