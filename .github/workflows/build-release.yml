@@ -22,9 +22,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Format Frontend
-        run: npm run format
-
       - name: Run i18next
         run: npm run i18n:parse
 
