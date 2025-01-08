@@ -305,9 +305,10 @@ async def generate_queries(
     try:
         return await generate_chat_completion(request, form_data=payload, user=user)
     except Exception as e:
+        log.error(f"Error generating chat completion: {e}", exc_info=True)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"detail": str(e)},
+            content={"detail": "An internal error has occurred."},
         )
 
 
