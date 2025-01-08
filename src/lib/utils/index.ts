@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid';
 import sha256 from 'js-sha256';
 
 import { WEBUI_BASE_URL } from '$lib/constants';
-import { TTS_RESPONSE_SPLIT } from '$lib/types';
 
 //////////////////////////
 // Helper functions
@@ -673,62 +672,16 @@ export const extractSentences = (text: string) => {
 
 	return sentences.map(cleanText).filter(Boolean);
 };
-
-export const extractParagraphsForAudio = (text: string) => {
-	const codeBlocks: string[] = [];
-	let index = 0;
-
-	// Temporarily replace code blocks with placeholders and store the blocks separately
-	text = text.replace(codeBlockRegex, (match) => {
-		const placeholder = `\u0000${index}\u0000`; // Use a unique placeholder
-		codeBlocks[index++] = match;
-		return placeholder;
-	});
-
-	// Split the modified text into paragraphs based on newlines, avoiding these blocks
-	let paragraphs = text.split(/\n+/);
-
-	// Restore code blocks and process paragraphs
-	paragraphs = paragraphs.map((paragraph) => {
-		// Check if the paragraph includes a placeholder for a code block
-		return paragraph.replace(/\u0000(\d+)\u0000/g, (_, idx) => codeBlocks[idx]);
-	});
-
-	return paragraphs.map(cleanText).filter(Boolean);
-};
-
-export const extractSentencesForAudio = (text: string) => {
-	return extractSentences(text).reduce((mergedTexts, currentText) => {
-		const lastIndex = mergedTexts.length - 1;
-		if (lastIndex >= 0) {
-			const previousText = mergedTexts[lastIndex];
-			const wordCount = previousText.split(/\s+/).length;
-			const charCount = previousText.length;
-			if (wordCount < 4 || charCount < 50) {
-				mergedTexts[lastIndex] = previousText + ' ' + currentText;
-			} else {
-				mergedTexts.push(currentText);
-			}
-		} else {
-			mergedTexts.push(currentText);
-		}
-		return mergedTexts;
-	}, [] as string[]);
-};
-
 export const getMessageContentParts = (content: string, split_on: string = 'punctuation') => {
 	const messageContentParts: string[] = [];
 
 	switch (split_on) {
 		default:
 		case TTS_RESPONSE_SPLIT.PUNCTUATION:
-			messageContentParts.push(...extractSentencesForAudio(content));
 			break;
 		case TTS_RESPONSE_SPLIT.PARAGRAPHS:
-			messageContentParts.push(...extractParagraphsForAudio(content));
 			break;
 		case TTS_RESPONSE_SPLIT.NONE:
-			messageContentParts.push(cleanText(content));
 			break;
 	}
 

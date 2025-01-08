@@ -846,9 +846,7 @@
 
 					// Emit chat event for TTS
 					const messageContentParts = getMessageContentParts(
-						message.content,
-						$config?.audio?.tts?.split_on ?? 'punctuation'
-					);
+						message.content					);
 					messageContentParts.pop();
 
 					// dispatch only last sentence and make sure it hasn't been dispatched before
@@ -880,9 +878,7 @@
 
 			// Emit chat event for TTS
 			const messageContentParts = getMessageContentParts(
-				message.content,
-				$config?.audio?.tts?.split_on ?? 'punctuation'
-			);
+				message.content			);
 			messageContentParts.pop();
 
 			// dispatch only last sentence and make sure it hasn't been dispatched before
@@ -925,11 +921,6 @@
 				document.getElementById(`speak-button-${message.id}`)?.click();
 			}
 
-			// Emit chat event for TTS
-			let lastMessageContentPart =
-				getMessageContentParts(message.content, $config?.audio?.tts?.split_on ?? 'punctuation')?.at(
-					-1
-				) ?? '';
 			if (lastMessageContentPart) {
 				eventTarget.dispatchEvent(
 					new CustomEvent('chat', {
@@ -1566,8 +1557,6 @@
 			: `${$WEBUI_NAME}`}
 	</title>
 </svelte:head>
-
-<audio id="audioElement" src="" style="display: none;" />
 
 <EventConfirmDialog
 	bind:show={showEventConfirmation}

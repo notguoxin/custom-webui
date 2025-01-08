@@ -225,7 +225,6 @@
 									{updateChat}
 									{editMessage}
 									{saveMessage}
-									{rateMessage}
 									{actionMessage}
 									{submitMessage}
 									{continueResponse}

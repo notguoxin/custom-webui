@@ -15,18 +15,6 @@
 		if (!navigator.userActivation.hasBeenActive) {
 			return;
 		}
-
-		if ($settings?.notificationSound ?? true) {
-			if (!$playingNotificationSound && $isLastActiveTab) {
-				playingNotificationSound.set(true);
-
-				const audio = new Audio(`/audio/notification.mp3`);
-				audio.play().finally(() => {
-					// Ensure the global state is reset after the sound finishes
-					playingNotificationSound.set(false);
-				});
-			}
-		}
 	});
 </script>
 

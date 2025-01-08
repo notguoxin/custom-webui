@@ -147,14 +147,6 @@ type ModelOptions = {
 	stop?: boolean;
 };
 
-type AudioSettings = {
-	STTEngine?: string;
-	TTSEngine?: string;
-	speaker?: string;
-	model?: string;
-	nonLocalVoices?: boolean;
-};
-
 type TitleSettings = {
 	auto?: boolean;
 	model?: string;
