@@ -198,7 +198,6 @@
 				'images',
 				'audio',
 				'documents',
-				'rag',
 				'models',
 				'ollama',
 				'openai',

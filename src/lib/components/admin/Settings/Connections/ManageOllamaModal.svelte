@@ -999,15 +999,6 @@
 											</div>
 										</div>
 									{/if}
-									<div class=" mt-1 text-xs text-gray-400 dark:text-gray-500">
-										{$i18n.t('To access the GGUF models available for downloading,')}
-										<a
-											class=" text-gray-500 dark:text-gray-300 font-medium underline"
-											href="https://huggingface.co/models?search=gguf"
-											target="_blank">{$i18n.t('click here.')}</a
-										>
-									</div>
-
 									{#if uploadMessage}
 										<div class="mt-2">
 											<div class=" mb-2 text-xs">{$i18n.t('Upload Progress')}</div>

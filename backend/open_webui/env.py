@@ -87,7 +87,6 @@ log_sources = [
     "MODELS",
     "OLLAMA",
     "OPENAI",
-    "RAG",
     "SOCKET",
 ]
 

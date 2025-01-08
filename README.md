@@ -1,5 +1,5 @@
 # Custom WebUI 👋
-A heavily modifed version of [Open WebUI](https://github.com/open-webui/open-webui)
+A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
 
 ## License 📜
 

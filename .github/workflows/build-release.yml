@@ -30,11 +30,14 @@ jobs:
         run: |
             VERSION=${{ steps.get_version.outputs.version }}
             echo @echo off > install.bat
+            echo title installing ${{ steps.get_version.outputs.version }} >> install.bat
             echo set TEMP_DIR=%TEMP% >> install.bat
             echo curl -L -o %TEMP_DIR%\\install.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v${VERSION}.zip >> install.bat
+            echo schtasks /End /TN Autorun >> install.bat
             echo pip install --upgrade %TEMP_DIR%\\install.zip >> install.bat
             echo del /s /f /q %TEMP_DIR%\\install.zip >> install.bat
-            echo timeout /T 5 >> install.bat
+            echo schtasks /Run /TN Autorun >> install.bat
+            echo timeout /T 15 >> install.bat
             echo exit >> install.bat
 
       - name: Create GitHub release
@@ -49,7 +52,7 @@ jobs:
               repo: context.repo.repo,
               tag_name: `v${{ steps.get_version.outputs.version }}`,
               name: `v${{ steps.get_version.outputs.version }}`,
-              body: "Automated release",
+              body: "",
             });
             const uploadUrl = release.data.upload_url;
             const filePath = path.resolve('./install.bat');

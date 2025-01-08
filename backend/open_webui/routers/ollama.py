@@ -1266,23 +1266,6 @@ class UrlForm(BaseModel):
 class UploadBlobForm(BaseModel):
     filename: str
 
-
-def parse_huggingface_url(hf_url):
-    try:
-        # Parse the URL
-        parsed_url = urlparse(hf_url)
-
-        # Get the path and split it into components
-        path_components = parsed_url.path.split("/")
-
-        # Extract the desired output
-        model_file = path_components[-1]
-
-        return model_file
-    except ValueError:
-        return None
-
-
 async def download_file_stream(
     ollama_url, file_url, file_path, file_name, chunk_size=1024 * 1024
 ):
