@@ -26,19 +26,19 @@ jobs:
           VERSION=$(jq -r '.version' package.json)
           echo "::set-output name=version::$VERSION"
 
-      - name: Create batch script to download and install
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Build
         run: |
-            VERSION=${{ steps.get_version.outputs.version }}
-            echo @echo off > install.bat
-            echo title installing ${{ steps.get_version.outputs.version }} >> install.bat
-            echo set TEMP_DIR=%TEMP% >> install.bat
-            echo curl -L -o %TEMP_DIR%\\install.zip https://github.com/notguoxin/custom-webui/archive/refs/tags/v${VERSION}.zip >> install.bat
-            echo schtasks /End /TN Autorun >> install.bat
-            echo pip install --upgrade %TEMP_DIR%\\install.zip >> install.bat
-            echo del /s /f /q %TEMP_DIR%\\install.zip >> install.bat
-            echo schtasks /Run /TN Autorun >> install.bat
-            echo timeout /T 15 >> install.bat
-            echo exit >> install.bat
+          python -m pip install --upgrade pip
+          pip install build
+          python -m build .
 
       - name: Create GitHub release
         uses: actions/github-script@v7
@@ -55,7 +55,7 @@ jobs:
               body: "",
             });
             const uploadUrl = release.data.upload_url;
-            const filePath = path.resolve('./install.bat');
+            const filePath = path.join('dist', `open_webui-${{ steps.get_version.outputs.version }}-py3-none-any.whl`);
             const stat = fs.statSync(filePath);
             await github.rest.repos.uploadReleaseAsset({
               url: uploadUrl,
@@ -63,7 +63,7 @@ jobs:
                 'content-length': stat.size,
                 'content-type': 'application/octet-stream',
               },
-              name: 'install.bat',
+              name: path.basename(filePath),
               data: fs.readFileSync(filePath),
             });
             console.log(`Created release ${release.data.html_url}`);
