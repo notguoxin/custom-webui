@@ -462,28 +462,6 @@ USER_PERMISSIONS = PersistentConfig(
     },
 )
 
-
-ENABLE_EVALUATION_ARENA_MODELS = PersistentConfig(
-    "ENABLE_EVALUATION_ARENA_MODELS",
-    "evaluation.arena.enable",
-    False,
-)
-EVALUATION_ARENA_MODELS = PersistentConfig(
-    "EVALUATION_ARENA_MODELS",
-    "evaluation.arena.models",
-    [],
-)
-
-DEFAULT_ARENA_MODEL = {
-    "id": "arena-model",
-    "name": "Arena Model",
-    "meta": {
-        "profile_image_url": "/favicon.png",
-        "description": "Submit your questions to anonymous AI chatbots and vote on the best response.",
-        "model_ids": None,
-    },
-}
-
 ENABLE_ADMIN_EXPORT = False
 
 ENABLE_ADMIN_CHAT_ACCESS = False

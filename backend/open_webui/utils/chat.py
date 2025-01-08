@@ -66,54 +66,6 @@ async def generate_chat_completion(
         except Exception as e:
             raise e
 
-    if model["owned_by"] == "arena":
-        model_ids = model.get("info", {}).get("meta", {}).get("model_ids")
-        filter_mode = model.get("info", {}).get("meta", {}).get("filter_mode")
-        if model_ids and filter_mode == "exclude":
-            model_ids = [
-                model["id"]
-                for model in list(request.app.state.MODELS.values())
-                if model.get("owned_by") != "arena" and model["id"] not in model_ids
-            ]
-
-        selected_model_id = None
-        if isinstance(model_ids, list) and model_ids:
-            selected_model_id = random.choice(model_ids)
-        else:
-            model_ids = [
-                model["id"]
-                for model in list(request.app.state.MODELS.values())
-                if model.get("owned_by") != "arena"
-            ]
-            selected_model_id = random.choice(model_ids)
-
-        form_data["model"] = selected_model_id
-
-        if form_data.get("stream") == True:
-
-            async def stream_wrapper(stream):
-                yield f"data: {json.dumps({'selected_model_id': selected_model_id})}\n\n"
-                async for chunk in stream:
-                    yield chunk
-
-            response = await generate_chat_completion(
-                request, form_data, user, bypass_filter=True
-            )
-            return StreamingResponse(
-                stream_wrapper(response.body_iterator),
-                media_type="text/event-stream",
-                background=response.background,
-            )
-        else:
-            return {
-                **(
-                    await generate_chat_completion(
-                        request, form_data, user, bypass_filter=True
-                    )
-                ),
-                "selected_model_id": selected_model_id,
-            }
-
     if model["owned_by"] == "ollama":
         # Using /ollama/api/chat endpoint
         form_data = convert_payload_openai_to_ollama(form_data)

@@ -73,7 +73,7 @@ type BaseModel = {
 	id: string;
 	name: string;
 	info?: ModelConfig;
-	owned_by: 'ollama' | 'openai' | 'arena';
+	owned_by: 'ollama' | 'openai';
 };
 
 export interface OpenAIModel extends BaseModel {

@@ -191,7 +191,6 @@
 				'admincontrols',
 				'adminfeatures',
 				'usercontrol',
-				'arenamodel',
 				'evaluations',
 				'database',
 				'images',
