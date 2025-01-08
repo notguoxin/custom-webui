@@ -34,7 +34,6 @@
 	export let files = [];
 
 	export let selectedToolIds = [];
-	export let webSearchEnabled = false;
 
 	let models = [];
 
@@ -194,7 +193,6 @@
 					bind:prompt
 					bind:autoScroll
 					bind:selectedToolIds
-					bind:webSearchEnabled
 					bind:atSelectedModel
 					{transparentBackground}
 					{stopResponse}

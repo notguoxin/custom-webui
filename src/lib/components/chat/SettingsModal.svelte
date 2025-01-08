@@ -193,7 +193,6 @@
 				'usercontrol',
 				'arenamodel',
 				'evaluations',
-				'websearch',
 				'database',
 				'images',
 				'audio',

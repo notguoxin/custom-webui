@@ -59,7 +59,6 @@
 		updateChatById
 	} from '$lib/apis/chats';
 	import { generateOpenAIChatCompletion } from '$lib/apis/openai';
-	import { processWeb, processWebSearch, processYoutubeVideo } from '$lib/apis/retrieval';
 	import { createOpenAITextStream } from '$lib/apis/streaming';
 	import { queryMemory } from '$lib/apis/memories';
 	import { getAndUpdateUserLocation, getUserSettings } from '$lib/apis/users';
@@ -109,7 +108,6 @@
 	$: selectedModelIds = atSelectedModel !== undefined ? [atSelectedModel.id] : selectedModels;
 
 	let selectedToolIds = [];
-	let webSearchEnabled = false;
 
 	let chat = null;
 	let tags = [];
@@ -134,7 +132,6 @@
 			prompt = '';
 			files = [];
 			selectedToolIds = [];
-			webSearchEnabled = false;
 
 			loaded = false;
 
@@ -148,7 +145,6 @@
 
 						prompt = input.prompt;
 						files = input.files;
-						webSearchEnabled = input.webSearchEnabled;
 					} catch (e) {}
 				}
 
@@ -365,12 +361,10 @@
 				const input = JSON.parse(localStorage.getItem(`chat-input-${chatIdProp}`));
 				prompt = input.prompt;
 				files = input.files;
-				webSearchEnabled = input.webSearchEnabled;
 			} catch (e) {
 				prompt = '';
 				files = [];
 				selectedToolIds = [];
-				webSearchEnabled = false;
 			}
 		}
 
@@ -405,189 +399,6 @@
 		window.removeEventListener('message', onMessageHandler);
 		$socket?.off('chat-events', chatEventHandler);
 	});
-
-	// File upload functions
-
-	const uploadGoogleDriveFile = async (fileData) => {
-		console.log('Starting uploadGoogleDriveFile with:', {
-			id: fileData.id,
-			name: fileData.name,
-			url: fileData.url,
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		});
-
-		// Validate input
-		if (!fileData?.id || !fileData?.name || !fileData?.url || !fileData?.headers?.Authorization) {
-			throw new Error('Invalid file data provided');
-		}
-
-		const tempItemId = uuidv4();
-		const fileItem = {
-			type: 'file',
-			file: '',
-			id: null,
-			url: fileData.url,
-			name: fileData.name,
-			collection_name: '',
-			status: 'uploading',
-			error: '',
-			itemId: tempItemId,
-			size: 0
-		};
-
-		try {
-			files = [...files, fileItem];
-			console.log('Processing web file with URL:', fileData.url);
-
-			// Configure fetch options with proper headers
-			const fetchOptions = {
-				headers: {
-					Authorization: fileData.headers.Authorization,
-					Accept: '*/*'
-				},
-				method: 'GET'
-			};
-
-			// Attempt to fetch the file
-			console.log('Fetching file content from Google Drive...');
-			const fileResponse = await fetch(fileData.url, fetchOptions);
-
-			if (!fileResponse.ok) {
-				const errorText = await fileResponse.text();
-				throw new Error(`Failed to fetch file (${fileResponse.status}): ${errorText}`);
-			}
-
-			// Get content type from response
-			const contentType = fileResponse.headers.get('content-type') || 'application/octet-stream';
-			console.log('Response received with content-type:', contentType);
-
-			// Convert response to blob
-			console.log('Converting response to blob...');
-			const fileBlob = await fileResponse.blob();
-
-			if (fileBlob.size === 0) {
-				throw new Error('Retrieved file is empty');
-			}
-
-			console.log('Blob created:', {
-				size: fileBlob.size,
-				type: fileBlob.type || contentType
-			});
-
-			// Create File object with proper MIME type
-			const file = new File([fileBlob], fileData.name, {
-				type: fileBlob.type || contentType
-			});
-
-			console.log('File object created:', {
-				name: file.name,
-				size: file.size,
-				type: file.type
-			});
-
-			if (file.size === 0) {
-				throw new Error('Created file is empty');
-			}
-
-			// Upload file to server
-			console.log('Uploading file to server...');
-			const uploadedFile = await uploadFile(localStorage.token, file);
-
-			if (!uploadedFile) {
-				throw new Error('Server returned null response for file upload');
-			}
-
-			console.log('File uploaded successfully:', uploadedFile);
-
-			// Update file item with upload results
-			fileItem.status = 'uploaded';
-			fileItem.file = uploadedFile;
-			fileItem.id = uploadedFile.id;
-			fileItem.size = file.size;
-			fileItem.collection_name = uploadedFile?.meta?.collection_name;
-			fileItem.url = `${WEBUI_API_BASE_URL}/files/${uploadedFile.id}`;
-
-			files = files;
-			toast.success($i18n.t('File uploaded successfully'));
-		} catch (e) {
-			console.error('Error uploading file:', e);
-			files = files.filter((f) => f.itemId !== tempItemId);
-			toast.error(
-				$i18n.t('Error uploading file: {{error}}', {
-					error: e.message || 'Unknown error'
-				})
-			);
-		}
-	};
-
-	const uploadWeb = async (url) => {
-		console.log(url);
-
-		const fileItem = {
-			type: 'doc',
-			name: url,
-			collection_name: '',
-			status: 'uploading',
-			url: url,
-			error: ''
-		};
-
-		try {
-			files = [...files, fileItem];
-			const res = await processWeb(localStorage.token, '', url);
-
-			if (res) {
-				fileItem.status = 'uploaded';
-				fileItem.collection_name = res.collection_name;
-				fileItem.file = {
-					...res.file,
-					...fileItem.file
-				};
-
-				files = files;
-			}
-		} catch (e) {
-			// Remove the failed doc from the files array
-			files = files.filter((f) => f.name !== url);
-			toast.error(JSON.stringify(e));
-		}
-	};
-
-	const uploadYoutubeTranscription = async (url) => {
-		console.log(url);
-
-		const fileItem = {
-			type: 'doc',
-			name: url,
-			collection_name: '',
-			status: 'uploading',
-			context: 'full',
-			url: url,
-			error: ''
-		};
-
-		try {
-			files = [...files, fileItem];
-			const res = await processYoutubeVideo(localStorage.token, url);
-
-			if (res) {
-				fileItem.status = 'uploaded';
-				fileItem.collection_name = res.collection_name;
-				fileItem.file = {
-					...res.file,
-					...fileItem.file
-				};
-				files = files;
-			}
-		} catch (e) {
-			// Remove the failed doc from the files array
-			files = files.filter((f) => f.name !== url);
-			toast.error(e);
-		}
-	};
-
 	//////////////////////////
 	// Web functions
 	//////////////////////////
@@ -664,14 +475,6 @@
 		chatFiles = [];
 		params = {};
 
-		if ($page.url.searchParams.get('youtube')) {
-			uploadYoutubeTranscription(
-				`https://www.youtube.com/watch?v=${$page.url.searchParams.get('youtube')}`
-			);
-		}
-		if ($page.url.searchParams.get('web-search') === 'true') {
-			webSearchEnabled = true;
-		}
 		
 		if ($page.url.searchParams.get('call') === 'true') {
 			showCallOverlay.set(true);
@@ -1491,9 +1294,6 @@
 				},
 
 				files: files.length > 0 ? files : undefined,
-				features: {
-					web_search: webSearchEnabled
-				},
 
 				session_id: $socket?.id,
 				chat_id: $chatId,
@@ -1902,17 +1702,6 @@
 										localStorage.removeItem(`chat-input-${$chatId}`);
 									}
 								}}
-								on:upload={async (e) => {
-									const { type, data } = e.detail;
-
-									if (type === 'web') {
-										await uploadWeb(data);
-									} else if (type === 'youtube') {
-										await uploadYoutubeTranscription(data);
-									} else if (type === 'google-drive') {
-										await uploadGoogleDriveFile(data);
-									}
-								}}
 								on:submit={async (e) => {
 									if (e.detail) {
 										await tick();
@@ -1943,15 +1732,6 @@
 								transparentBackground={$settings?.backgroundImageUrl ?? false}
 								{stopResponse}
 								{createMessagePair}
-								on:upload={async (e) => {
-									const { type, data } = e.detail;
-
-									if (type === 'web') {
-										await uploadWeb(data);
-									} else if (type === 'youtube') {
-										await uploadYoutubeTranscription(data);
-									}
-								}}
 								on:submit={async (e) => {
 									if (e.detail) {
 										await tick();

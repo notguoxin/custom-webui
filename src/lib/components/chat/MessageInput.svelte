@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { v4 as uuidv4 } from 'uuid';
-	import { createPicker, getAuthToken } from '$lib/utils/google-drive-picker';
 
 	import { onMount, tick, getContext, createEventDispatcher, onDestroy } from 'svelte';
 	const dispatch = createEventDispatcher();
@@ -51,14 +50,6 @@
 
 	export let prompt = '';
 	export let files = [];
-
-	export let webSearchEnabled = false;
-
-	$: onChange({
-		prompt,
-		files,
-		webSearchEnabled
-	});
 
 	let loaded = false;
 	let recording = false;
@@ -352,25 +343,10 @@
 				</div>
 
 				<div class="w-full relative">
-					{#if atSelectedModel !== undefined || webSearchEnabled}
+					{#if atSelectedModel !== undefined}
 						<div
 							class="px-3 pb-0.5 pt-1.5 text-left w-full flex flex-col absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white dark:from-gray-900 z-10"
 						>
-							{#if webSearchEnabled}
-								<div class="flex items-center justify-between w-full">
-									<div class="flex items-center gap-2.5 text-sm dark:text-gray-500">
-										<div class="pl-1">
-											<span class="relative flex size-2">
-												<span
-													class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
-												/>
-												<span class="relative inline-flex rounded-full size-2 bg-green-500" />
-											</span>
-										</div>
-										<div class=" translate-y-[0.5px]">{$i18n.t('Search the web')}</div>
-									</div>
-								</div>
-							{/if}
 
 							{#if atSelectedModel !== undefined}
 								<div class="flex items-center justify-between w-full">
@@ -581,7 +557,6 @@
 										if (e.key === 'Escape') {
 											console.log('Escape');
 											atSelectedModel = undefined;
-											webSearchEnabled = false;
 										}
 									}}
 									rows="1"

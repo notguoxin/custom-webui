@@ -27,7 +27,6 @@
 	import Tooltip from '../../../../lib/components/common/Tooltip.svelte';
 	import RateComment from './RateComment.svelte';
 	import Spinner from '../../../../lib/components/common/Spinner.svelte';
-	import WebSearchResults from './ResponseMessage/WebSearchResults.svelte';
 	import Sparkles from '../../../../lib/components/icons/Sparkles.svelte';
 	import Error from './Error.svelte';
 	import Citations from './Citations.svelte';
@@ -503,33 +502,7 @@
 										</div>
 									{/if}
 
-									{#if status?.action === 'web_search' && status?.urls}
-										<WebSearchResults {status}>
-											<div class="flex flex-col justify-center -space-y-0.5">
-												<div
-													class="{status?.done === false
-														? 'shimmer'
-														: ''} text-base line-clamp-1 text-wrap"
-												>
-													<!-- $i18n.t("Generating search query") -->
-													<!-- $i18n.t("No search query generated") -->
-
-													<!-- $i18n.t('Searched {{count}} sites') -->
-													{#if status?.description.includes('{{count}}')}
-														{$i18n.t(status?.description, {
-															count: status?.urls.length
-														})}
-													{:else if status?.description === 'No search query generated'}
-														{$i18n.t('No search query generated')}
-													{:else if status?.description === 'Generating search query'}
-														{$i18n.t('Generating search query')}
-													{:else}
-														{status?.description}
-													{/if}
-												</div>
-											</div>
-										</WebSearchResults>
-									{:else if status?.action === 'knowledge_search'}
+									{#if status?.action === 'knowledge_search'}
 										<div class="flex flex-col justify-center -space-y-0.5">
 											<div
 												class="{status?.done === false

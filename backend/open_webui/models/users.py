@@ -28,8 +28,6 @@ class User(Base):
     settings = Column(JSONField, nullable=True)
     info = Column(JSONField, nullable=True)
 
-    oauth_sub = Column(Text, unique=True)
-
 
 class UserSettings(BaseModel):
     ui: Optional[dict] = {}
@@ -51,8 +49,6 @@ class UserModel(BaseModel):
     api_key: Optional[str] = None
     settings: Optional[UserSettings] = None
     info: Optional[dict] = None
-
-    oauth_sub: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -97,7 +93,6 @@ class UsersTable:
         email: str,
         profile_image_url: str = "/user.png",
         role: str = "pending",
-        oauth_sub: Optional[str] = None,
     ) -> Optional[UserModel]:
         with get_db() as db:
             user = UserModel(
@@ -110,7 +105,6 @@ class UsersTable:
                     "last_active_at": int(time.time()),
                     "created_at": int(time.time()),
                     "updated_at": int(time.time()),
-                    "oauth_sub": oauth_sub,
                 }
             )
             result = User(**user.model_dump())
@@ -142,14 +136,6 @@ class UsersTable:
         try:
             with get_db() as db:
                 user = db.query(User).filter_by(email=email).first()
-                return UserModel.model_validate(user)
-        except Exception:
-            return None
-
-    def get_user_by_oauth_sub(self, sub: str) -> Optional[UserModel]:
-        try:
-            with get_db() as db:
-                user = db.query(User).filter_by(oauth_sub=sub).first()
                 return UserModel.model_validate(user)
         except Exception:
             return None
@@ -218,19 +204,6 @@ class UsersTable:
                 db.query(User).filter_by(id=id).update(
                     {"last_active_at": int(time.time())}
                 )
-                db.commit()
-
-                user = db.query(User).filter_by(id=id).first()
-                return UserModel.model_validate(user)
-        except Exception:
-            return None
-
-    def update_user_oauth_sub_by_id(
-        self, id: str, oauth_sub: str
-    ) -> Optional[UserModel]:
-        try:
-            with get_db() as db:
-                db.query(User).filter_by(id=id).update({"oauth_sub": oauth_sub})
                 db.commit()
 
                 user = db.query(User).filter_by(id=id).first()
