@@ -9,6 +9,7 @@ jobs:
   testfrontend:
     name: 'Format & Build Frontend'
     runs-on: ubuntu-latest
+    continue-on-error: false  # This ensures the workflow fails if this step fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
