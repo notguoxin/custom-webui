@@ -22,7 +22,7 @@ jobs:
         uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
         with: 
-          tag: ${{ steps.get_version.outputs.version }}
+          tag: 'v${{ steps.get_version.outputs.version }}'
         
       - name: Exit if tag exists
         run: |
