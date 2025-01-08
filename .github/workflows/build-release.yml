@@ -18,16 +18,11 @@ jobs:
           VERSION=$(jq -r '.version' package.json)
           echo "::set-output name=version::$VERSION"
     
-      - name: Check if tag exists
-        id: check_tag
-        run: |
-          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
-            echo "Tag already exists"
-            exit 1
-          else
-            echo "Tag does not exist"
-            exit 0
-          fi
+      - uses: mukunku/tag-exists-action@v1.6.0
+        id: check-tag
+        with: 
+          tag: ${{ steps.get_version.outputs.version }}
+          repo: 'actions/checkout'
 
   testfrontend:
     name: 'Format & Build Frontend'
