@@ -25,6 +25,7 @@ jobs:
           tag: 'v${{ steps.get_version.outputs.version }}'
         
       - name: Exit if tag exists
+        continue-on-error: false
         run: |
           if [ ${{ steps.check-tag.outputs.exists }} == "true" ]; then
             echo "Tag already exists"
