@@ -51,6 +51,13 @@ log.setLevel(SRC_LOG_LEVELS["OPENAI"])
 #
 ##########################################
 
+def is_openai_api_url(url):
+    try:
+        parsed_url = urlparse(url)
+        # Check for exact hostname match
+        return parsed_url.hostname == "api.openai.com"
+    except Exception:
+        return False
 
 async def send_get_request(url, key=None):
     timeout = aiohttp.ClientTimeout(total=AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST)
@@ -445,7 +452,7 @@ async def get_models(
                     response_data = await r.json()
 
                     # Check if we're calling OpenAI API based on the URL
-                    if "api.openai.com" in urlparse(url).hostname:
+                    if is_openai_api_url(url):
                         # Filter models according to the specified conditions
                         response_data["data"] = [
                             model

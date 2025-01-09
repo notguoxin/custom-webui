@@ -6,6 +6,7 @@ authors = [
 ]
 license = { file = "LICENSE" }
 dependencies = [
+    "email_validator"
     "fastapi==0.111.0",
     "uvicorn[standard]==0.30.6",
     "pydantic==2.9.2",
