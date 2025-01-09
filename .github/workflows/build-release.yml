@@ -49,16 +49,7 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
-
-      - name: Cache pip dependencies
-        if: steps.check-tag.outputs.exists == 'false'
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-        
+              
       - name: Build
         if: steps.check-tag.outputs.exists == 'false' && steps.clean_cache.conclusion == 'success'
         run: |
