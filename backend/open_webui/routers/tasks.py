@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 from typing import Optional
 import logging
+import traceback
 
 from open_webui.utils.chat import generate_chat_completion
 from open_webui.utils.task import (
@@ -304,9 +305,10 @@ async def generate_queries(
     try:
         return await generate_chat_completion(request, form_data=payload, user=user)
     except Exception as e:
+        log.error(f"Error generating chat completion: {e}", exc_info=True)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"detail": str(e)},
+            content={"detail": "An internal error has occurred."},
         )
 
 
@@ -364,9 +366,10 @@ async def generate_emoji(
     try:
         return await generate_chat_completion(request, form_data=payload, user=user)
     except Exception as e:
+        log.error("An error occurred: %s", traceback.format_exc())
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"detail": str(e)},
+            content={"detail": "An internal error has occurred!"},
         )
 
 
@@ -417,7 +420,8 @@ async def generate_moa_response(
     try:
         return await generate_chat_completion(request, form_data=payload, user=user)
     except Exception as e:
+        log.error("An error occurred: %s", traceback.format_exc())
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"detail": str(e)},
+            content={"detail": "An internal error has occurred."},
         )
