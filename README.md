@@ -1,7 +1,7 @@
 > [!WARNING]  
 > Not tested for production use. \
 > May introduce bugs that is not present in the original [Open WebUI](https://github.com/open-webui/open-webui). \
-> You can however file a [issue](https://github.com/notguoxin/custom-webui/labels) with label such as: `bug - minor`, `bug - severe`, `bug - visual`.[^1]
+> You can however file a [issue](https://github.com/notguoxin/custom-webui/labels)[^1]
 
 # Custom WebUI 👋
 A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
