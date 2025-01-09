@@ -3,7 +3,6 @@ permissions:
   pull-requests: write
   contents: write
 
-
 on:
   push:
     branches:
@@ -33,11 +32,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Clean npm cache
         id: clean_cache
         run: npm cache clean --force
-        
+
       - name: Build
         run: |
           python -m pip install --upgrade pip
