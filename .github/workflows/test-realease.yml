@@ -11,6 +11,7 @@ on:
     paths-ignore:
       - 'package.json'
       - 'package-lock.json'
+      - 'README.md'
 
 jobs:
   test_release:
