@@ -150,7 +150,6 @@ class AuthsTable:
             return False
 
     def authenticate_user_by_trusted_header(self, email: str) -> Optional[UserModel]:
-        log.info(f"authenticate_user_by_trusted_header: {email}")
         try:
             with get_db() as db:
                 auth = db.query(Auth).filter_by(email=email, active=True).first()

@@ -21,7 +21,7 @@ jobs:
           VERSION=$(jq -r '.version' package.json)
           echo "::set-output name=version::$VERSION"
 
-      - uses: mukunku/tag-exists-action@v1.6.0
+      - uses: mukunku/tag-exists-action@16e94379f4a0448da8ec100d16d3dc50b49cbd52
         id: check-tag
         with: 
           tag: 'v${{ steps.get_version.outputs.version }}'

@@ -4,6 +4,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Literal, Optional, overload
+from urllib.parse import urlparse
 
 import aiohttp
 from aiocache import cached
@@ -444,7 +445,7 @@ async def get_models(
                     response_data = await r.json()
 
                     # Check if we're calling OpenAI API based on the URL
-                    if "api.openai.com" in url:
+                    if "api.openai.com" in urlparse(url).hostname:
                         # Filter models according to the specified conditions
                         response_data["data"] = [
                             model
