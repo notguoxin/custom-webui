@@ -164,7 +164,7 @@ async def chat_completion_filter_functions_handler(request, body, model, extra_p
 async def chat_completion_tools_handler(
     request: Request, body: dict, user: UserModel, models, extra_params: dict
 ) -> tuple[dict, dict]:
-    return "REMOVED FUNCTIONALITY", {}
+    return body, {}
 
 async def chat_web_search_handler(
     request: Request, form_data: dict, extra_params: dict, user
@@ -325,19 +325,6 @@ async def process_chat_payload(request, form_data, metadata, user, model):
 
     if len(sources) > 0:
         events.append({"sources": sources})
-
-    if model_knowledge:
-        await event_emitter(
-            {
-                "type": "status",
-                "data": {
-                    "action": "knowledge_search",
-                    "query": user_message,
-                    "done": True,
-                    "hidden": True,
-                },
-            }
-        )
 
     return form_data, events
 
