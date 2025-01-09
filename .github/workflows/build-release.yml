@@ -26,7 +26,6 @@ jobs:
         with: 
           tag: 'v${{ steps.get_version.outputs.version }}'
 
-
       - uses: actions/setup-node@v4
         if: steps.check-tag.outputs.exists == 'false'
         with:
@@ -36,12 +35,21 @@ jobs:
         if: steps.check-tag.outputs.exists == 'false'
         with:
           python-version: 3.11
-      
+
       - name: Clean npm cache
         if: steps.check-tag.outputs.exists == 'false'
         id: clean_cache
         run: npm cache clean --force
         
+      - name: Cache npm dependencies
+        if: steps.check-tag.outputs.exists == 'false'
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+              
       - name: Build
         if: steps.check-tag.outputs.exists == 'false' && steps.clean_cache.conclusion == 'success'
         run: |

@@ -423,12 +423,6 @@ USER_PERMISSIONS_WORKSPACE_MODELS_ACCESS = (
     == "true"
 )
 
-USER_PERMISSIONS_WORKSPACE_KNOWLEDGE_ACCESS = False
-
-USER_PERMISSIONS_WORKSPACE_PROMPTS_ACCESS = False
-
-USER_PERMISSIONS_WORKSPACE_TOOLS_ACCESS = False
-
 USER_PERMISSIONS_CHAT_FILE_UPLOAD = False
 
 USER_PERMISSIONS_CHAT_DELETE = (
@@ -449,9 +443,6 @@ USER_PERMISSIONS = PersistentConfig(
     {
         "workspace": {
             "models": USER_PERMISSIONS_WORKSPACE_MODELS_ACCESS,
-            "knowledge": USER_PERMISSIONS_WORKSPACE_KNOWLEDGE_ACCESS,
-            "prompts": USER_PERMISSIONS_WORKSPACE_PROMPTS_ACCESS,
-            "tools": USER_PERMISSIONS_WORKSPACE_TOOLS_ACCESS,
         },
         "chat": {
             "file_upload": USER_PERMISSIONS_CHAT_FILE_UPLOAD,
@@ -564,95 +555,6 @@ Artificial Intelligence in Healthcare
 <chat_history>
 {{MESSAGES:END:2}}
 </chat_history>"""
-
-
-TAGS_GENERATION_PROMPT_TEMPLATE = PersistentConfig(
-    "TAGS_GENERATION_PROMPT_TEMPLATE",
-    "task.tags.prompt_template",
-    os.environ.get("TAGS_GENERATION_PROMPT_TEMPLATE", ""),
-)
-
-DEFAULT_TAGS_GENERATION_PROMPT_TEMPLATE = """### Task:
-Generate 1-3 broad tags categorizing the main themes of the chat history, along with 1-3 more specific subtopic tags.
-
-### Guidelines:
-- Start with high-level domains (e.g. Science, Technology, Philosophy, Arts, Politics, Business, Health, Sports, Entertainment, Education)
-- Consider including relevant subfields/subdomains if they are strongly represented throughout the conversation
-- If content is too short (less than 3 messages) or too diverse, use only ["General"]
-- Use the chat's primary language; default to English if multilingual
-- Prioritize accuracy over specificity
-
-### Output:
-JSON format: { "tags": ["tag1", "tag2", "tag3"] }
-
-### Chat History:
-<chat_history>
-{{MESSAGES:END:6}}
-</chat_history>"""
-
-ENABLE_TAGS_GENERATION = PersistentConfig(
-    "ENABLE_TAGS_GENERATION",
-    "task.tags.enable",
-    False,
-)
-
-
-ENABLE_SEARCH_QUERY_GENERATION = PersistentConfig(
-    "ENABLE_SEARCH_QUERY_GENERATION",
-    "task.query.search.enable",
-    os.environ.get("ENABLE_SEARCH_QUERY_GENERATION", "True").lower() == "true",
-)
-
-ENABLE_RETRIEVAL_QUERY_GENERATION = PersistentConfig(
-    "ENABLE_RETRIEVAL_QUERY_GENERATION",
-    "task.query.retrieval.enable",
-    os.environ.get("ENABLE_RETRIEVAL_QUERY_GENERATION", "True").lower() == "true",
-)
-
-
-QUERY_GENERATION_PROMPT_TEMPLATE = PersistentConfig(
-    "QUERY_GENERATION_PROMPT_TEMPLATE",
-    "task.query.prompt_template",
-    os.environ.get("QUERY_GENERATION_PROMPT_TEMPLATE", ""),
-)
-
-DEFAULT_QUERY_GENERATION_PROMPT_TEMPLATE = """### Task:
-Analyze the chat history to determine the necessity of generating search queries, in the given language. By default, **prioritize generating 1-3 broad and relevant search queries** unless it is absolutely certain that no additional information is required. The aim is to retrieve comprehensive, updated, and valuable information even with minimal uncertainty. If no search is unequivocally needed, return an empty list.
-
-### Guidelines:
-- Respond **EXCLUSIVELY** with a JSON object. Any form of extra commentary, explanation, or additional text is strictly prohibited.
-- When generating search queries, respond in the format: { "queries": ["query1", "query2"] }, ensuring each query is distinct, concise, and relevant to the topic.
-- If and only if it is entirely certain that no useful results can be retrieved by a search, return: { "queries": [] }.
-- Err on the side of suggesting search queries if there is **any chance** they might provide useful or updated information.
-- Be concise and focused on composing high-quality search queries, avoiding unnecessary elaboration, commentary, or assumptions.
-- Today's date is: {{CURRENT_DATE}}.
-- Always prioritize providing actionable and broad queries that maximize informational coverage.
-
-### Output:
-Strictly return in JSON format: 
-{
-  "queries": ["query1", "query2"]
-}
-
-### Chat History:
-<chat_history>
-{{MESSAGES:END:6}}
-</chat_history>
-"""
-
-TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE = PersistentConfig(
-    "TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE",
-    "task.tools.prompt_template",
-    os.environ.get("TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE", ""),
-)
-
-
-DEFAULT_TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE = """Available Tools: {{TOOLS}}\nReturn an empty string if no tools match the query. If a function tool matches, construct and return a JSON object in the format {\"name\": \"functionName\", \"parameters\": {\"requiredFunctionParamKey\": \"requiredFunctionParamValue\"}} using the appropriate tool and its parameters. Only return the object and limit the response to the JSON object without additional text."""
-
-
-DEFAULT_EMOJI_GENERATION_PROMPT_TEMPLATE = """Your task is to reflect the speaker's likely facial expression through a fitting emoji. Interpret emotions from the message and reflect their facial expression using fitting, diverse emojis (e.g., 😊, 😢, 😡, 😱).
-
-Message: ```{{prompt}}```"""
 
 DEFAULT_MOA_GENERATION_PROMPT_TEMPLATE = """You have been provided with a set of responses from various models to the latest user query: "{{prompt}}"
 

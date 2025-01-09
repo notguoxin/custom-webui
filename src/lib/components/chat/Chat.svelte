@@ -38,7 +38,6 @@
 	import {
 		convertMessagesToHistory,
 		copyToClipboard,
-		extractSentencesForAudio,
 		promptTemplate,
 		splitStream,
 		sleep
@@ -861,14 +860,6 @@
 
 			if ($settings.responseAutoCopy) {
 				copyToClipboard(message.content);
-			}
-			
-			if (lastMessageContentPart) {
-				eventTarget.dispatchEvent(
-					new CustomEvent('chat', {
-						detail: { id: message.id, content: lastMessageContentPart }
-					})
-				);
 			}
 			eventTarget.dispatchEvent(
 				new CustomEvent('chat:finish', {
