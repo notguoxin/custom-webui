@@ -4,7 +4,7 @@
 > You can however file a [issue](https://github.com/notguoxin/custom-webui/labels)[^1]
 
 # Custom WebUI 👋
-> A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui) \
+> A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
 
 # Info:
 - Main branch: 

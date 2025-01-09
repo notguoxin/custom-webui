@@ -11,8 +11,8 @@
 # Versions
 | Version | Working            |
 | ------- | ------------------ |
-| V0.1.98 | NRY                |
-| V0.1.97 | :white_check_mark: |
+| V0.1.98 | :white_check_mark: |
+| V0.1.97 | :x:                |
 | V0.1.96 | :x:                |
 | V0.1.95 | :white_check_mark: |
 
