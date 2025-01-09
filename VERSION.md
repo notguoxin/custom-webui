@@ -5,7 +5,7 @@
 | ------------------ | ------------------------ |
 | :white_check_mark: | Working perfectly [^1]   |
 | :x:                | Unable to start/function |
-| NRY                | Not Released Yet [^1]    |
+| NRY                | Not Released Yet         |
 
 
 # Versions
