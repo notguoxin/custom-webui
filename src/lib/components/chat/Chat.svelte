@@ -28,7 +28,6 @@
 		user,
 		socket,
 		showControls,
-		showCallOverlay,
 		currentChatPage,
 		temporaryChatEnabled,
 		mobile,
@@ -382,7 +381,6 @@
 			}
 
 			if (!value) {
-				showCallOverlay.set(false);
 				showOverview.set(false);
 				showArtifacts.set(false);
 			}
@@ -454,7 +452,6 @@
 		}
 
 		await showControls.set(false);
-		await showCallOverlay.set(false);
 		await showOverview.set(false);
 		await showArtifacts.set(false);
 
@@ -474,12 +471,6 @@
 
 		chatFiles = [];
 		params = {};
-
-		
-		if ($page.url.searchParams.get('call') === 'true') {
-			showCallOverlay.set(true);
-			showControls.set(true);
-		}
 
 		if ($page.url.searchParams.get('q')) {
 			prompt = $page.url.searchParams.get('q') ?? '';
@@ -914,12 +905,7 @@
 			if ($settings.responseAutoCopy) {
 				copyToClipboard(message.content);
 			}
-
-			if ($settings.responseAutoPlayback && !$showCallOverlay) {
-				await tick();
-				document.getElementById(`speak-button-${message.id}`)?.click();
-			}
-
+			
 			if (lastMessageContentPart) {
 				eventTarget.dispatchEvent(
 					new CustomEvent('chat', {
@@ -1317,15 +1303,15 @@
 			responseMessage.error = {
 				content: error
 			};
-			responseMessage.done = true;
 			history.messages[responseMessageId] = responseMessage;
+			responseMessage.done = true;
 			return null;
 		});
 
-		console.log(res);
-
 		if (res) {
 			taskId = res.task_id;
+			history.messages[responseMessageId] = responseMessage;
+			responseMessage.done = true;
 		}
 
 		await tick();

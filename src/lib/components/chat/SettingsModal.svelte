@@ -111,7 +111,6 @@
 				'voice',
 				'voicecontrol',
 				'voiceinterruption',
-				'call',
 				'emojis',
 				'displayemoji',
 				'save',
