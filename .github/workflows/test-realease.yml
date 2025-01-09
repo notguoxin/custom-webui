@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - dev
-
+    paths-ignore:
+      - 'package.json'
+      - 'package-lock.json'
+      
 jobs:
   test_release:
     runs-on: ubuntu-latest
