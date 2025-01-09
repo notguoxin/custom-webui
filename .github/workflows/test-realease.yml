@@ -33,6 +33,10 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Clean npm cache
+        id: clean_cache
+        run: npm cache clean --force
+
       - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
@@ -48,10 +52,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-      - name: Clean npm cache
-        id: clean_cache
-        run: npm cache clean --force
 
       - name: Build
         run: |
