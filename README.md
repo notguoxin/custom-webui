@@ -6,6 +6,9 @@
 # Custom WebUI 👋
 A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
 
+# Version
+check [here](VERSION.md) for more info
+
 # What's removed/changed/added?
 - Repository:
     - Removed Docker, pypi, frontend and backend build and formating[^2]
