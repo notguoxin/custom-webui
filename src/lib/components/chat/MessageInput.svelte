@@ -18,7 +18,6 @@
 
 	import { blobToFile, compressImage, createMessagesList, findWordIndices } from '$lib/utils';
 	import { uploadFile } from '$lib/apis/files';
-	import { get } from '$lib/apis/';
 
 	import { WEBUI_BASE_URL, WEBUI_API_BASE_URL, PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants';
 

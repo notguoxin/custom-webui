@@ -38,7 +38,6 @@
 	import {
 		convertMessagesToHistory,
 		copyToClipboard,
-		extractSentencesForAudio,
 		promptTemplate,
 		splitStream,
 		sleep
