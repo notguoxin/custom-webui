@@ -14,7 +14,6 @@
 	import {
 		copyToClipboard as _copyToClipboard,
 		approximateToHumanReadable,
-		getMessageContentParts,
 		sanitizeResponseContent,
 		createMessagesList
 	} from '../../../../lib/utils';

@@ -672,21 +672,6 @@ export const extractSentences = (text: string) => {
 
 	return sentences.map(cleanText).filter(Boolean);
 };
-export const getMessageContentParts = (content: string, split_on: string = 'punctuation') => {
-	const messageContentParts: string[] = [];
-
-	switch (split_on) {
-		default:
-		case TTS_RESPONSE_SPLIT.PUNCTUATION:
-			break;
-		case TTS_RESPONSE_SPLIT.PARAGRAPHS:
-			break;
-		case TTS_RESPONSE_SPLIT.NONE:
-			break;
-	}
-
-	return messageContentParts;
-};
 
 export const blobToFile = (blob, fileName) => {
 	// Create a new File object from the Blob
