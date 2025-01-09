@@ -5,6 +5,9 @@
 
 # Custom WebUI 👋
 > A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui)
+[![Release](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml/badge.svg?branch=main)](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml)
+[![Test](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml/badge.svg?branch=dev)](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml)
+![GitHub Release](https://img.shields.io/github/v/release/notguoxin/custom-webui)
 
 # Version information
 > Check [here](VERSION.md) for more info
