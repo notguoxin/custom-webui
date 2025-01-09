@@ -1,11 +1,11 @@
 > [!WARNING] 
 > Version not included may or may not work.
 
-| Indicator          | Meaning                  |
-| ------------------ | ------------------------ |
-| :white_check_mark: | Working perfectly [^1]   |
-| :x:                | Unable to start/function |
-| NRY                | Not Released Yet         |
+| Indicator          | Meaning                                 |
+| ------------------ | --------------------------------------- |
+| :white_check_mark: | Working perfectly [^1]                  |
+| :x:                | Unable to start/completely unfunctional |
+| NRY                | Not Released Yet                        |
 
 
 # Versions
