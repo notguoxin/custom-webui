@@ -5,6 +5,7 @@ import uuid
 from datetime import timedelta
 from pathlib import Path
 from typing import Callable, Optional
+from email_validator import validate_email, EmailNotValidError
 
 
 def get_message_list(messages, message_id):
@@ -204,8 +205,12 @@ def calculate_sha256_string(string):
 def validate_email_format(email: str) -> bool:
     if email.endswith("@localhost"):
         return True
-
-    return bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
+    
+    try:
+        validate_email(email)
+        return True
+    except EmailNotValidError:
+        return False
 
 
 def sanitize_filename(file_name):

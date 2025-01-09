@@ -38,7 +38,6 @@
 	import {
 		convertMessagesToHistory,
 		copyToClipboard,
-		getMessageContentParts,
 		extractSentencesForAudio,
 		promptTemplate,
 		splitStream,
@@ -834,27 +833,6 @@
 					if (navigator.vibrate && ($settings?.hapticFeedback ?? false)) {
 						navigator.vibrate(5);
 					}
-
-					// Emit chat event for TTS
-					const messageContentParts = getMessageContentParts(
-						message.content					);
-					messageContentParts.pop();
-
-					// dispatch only last sentence and make sure it hasn't been dispatched before
-					if (
-						messageContentParts.length > 0 &&
-						messageContentParts[messageContentParts.length - 1] !== message.lastSentence
-					) {
-						message.lastSentence = messageContentParts[messageContentParts.length - 1];
-						eventTarget.dispatchEvent(
-							new CustomEvent('chat', {
-								detail: {
-									id: message.id,
-									content: messageContentParts[messageContentParts.length - 1]
-								}
-							})
-						);
-					}
 				}
 			}
 		}
@@ -865,27 +843,6 @@
 
 			if (navigator.vibrate && ($settings?.hapticFeedback ?? false)) {
 				navigator.vibrate(5);
-			}
-
-			// Emit chat event for TTS
-			const messageContentParts = getMessageContentParts(
-				message.content			);
-			messageContentParts.pop();
-
-			// dispatch only last sentence and make sure it hasn't been dispatched before
-			if (
-				messageContentParts.length > 0 &&
-				messageContentParts[messageContentParts.length - 1] !== message.lastSentence
-			) {
-				message.lastSentence = messageContentParts[messageContentParts.length - 1];
-				eventTarget.dispatchEvent(
-					new CustomEvent('chat', {
-						detail: {
-							id: message.id,
-							content: messageContentParts[messageContentParts.length - 1]
-						}
-					})
-				);
 			}
 		}
 
