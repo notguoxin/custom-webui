@@ -5,11 +5,17 @@
 
 # Custom WebUI 👋
 > A heavily simplified version of [Open WebUI](https://github.com/open-webui/open-webui) \
-[![Release](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml/badge.svg?branch=main)](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml) \
-[![Test](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml/badge.svg?branch=dev)](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml) \
-![GitHub Release](https://img.shields.io/github/v/release/notguoxin/custom-webui)
 
-# Version information
+# Info:
+- Main branch: 
+    - [Latest release: ![GitHub Release](https://img.shields.io/github/v/release/notguoxin/custom-webui)](https://github.com/notguoxin/custom-webui/releases/latest/)
+    - Release workflow: [![Release](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml/badge.svg?branch=main)](https://github.com/notguoxin/custom-webui/actions/workflows/build-release.yml) 
+- Dev branch:
+    - Testing workflow: [![Test](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml/badge.svg?branch=dev)](https://github.com/notguoxin/custom-webui/actions/workflows/test-realease.yml)
+    - ![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/notguoxin/custom-webui/latest/dev)
+
+
+# Version information:
 > Check [here](VERSION.md) for more info
 
 # What's removed/modified/added?
@@ -49,8 +55,6 @@ This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LI
 Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪 \
 Modified by [NotGuoXin](https://github.com/notguoxin)
 
----
-## Foodnotes
 [^1]: I may or may not have time to fix the issue, look out for labels like: `wontfix`, `on halt`, `fixing`.
 
 [^2]: However you can download and install using pip from getting the whl file from the release page
