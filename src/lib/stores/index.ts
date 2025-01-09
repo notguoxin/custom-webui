@@ -4,8 +4,6 @@ import type { ModelConfig } from '$lib/apis';
 import type { Banner } from '$lib/types';
 import type { Socket } from 'socket.io-client';
 
-import emojiShortCodes from '$lib/emoji-shortcodes.json';
-
 // Backend
 export const WEBUI_NAME = writable(APP_NAME);
 export const config: Writable<Config | undefined> = writable(undefined);
@@ -21,20 +19,6 @@ export const activeUserIds: Writable<null | string[]> = writable(null);
 export const USAGE_POOL: Writable<null | string[]> = writable(null);
 
 export const theme = writable('system');
-
-export const shortCodesToEmojis = writable(
-	Object.entries(emojiShortCodes).reduce((acc, [key, value]) => {
-		if (typeof value === 'string') {
-			acc[value] = key;
-		} else {
-			for (const v of value) {
-				acc[v] = key;
-			}
-		}
-
-		return acc;
-	}, {})
-);
 
 export const chatId = writable('');
 export const chatTitle = writable('');
