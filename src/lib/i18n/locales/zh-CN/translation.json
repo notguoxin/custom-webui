@@ -3,7 +3,7 @@
 	"'s', 'm', 'h', 'd', 'w' or '-1' for no expiration.": "'s', 'm', 'h', 'd', 'w' 或 '-1' 表示无过期时间。",
 	"(e.g. `sh webui.sh --api --api-auth username_password`)": "（例如 `sh webui.sh --api --api-auth username_password`）",
 	"(e.g. `sh webui.sh --api`)": "（例如 `sh webui.sh --api`）",
-	"(latest)": "（最新版）",
+	"(latest!!!!!!!!!!!)": "（最新版）",
 	"{{ models }}": "{{ models }}",
 	"{{COUNT}} Replies": "",
 	"{{user}}'s Chats": "{{user}} 的对话记录",
