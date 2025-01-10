@@ -188,7 +188,7 @@ def apply_params_to_form_data(form_data, model):
             form_data["format"] = params["format"]
 
         if "keep_alive" in params:
-            form_data["keep_alive"] = params["keep_alive"]
+            form_data["keep_alive"] = "30m"
     else:
         if "seed" in params:
             form_data["seed"] = params["seed"]
