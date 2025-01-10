@@ -20,7 +20,6 @@
 		config,
 		type Model,
 		models,
-		tags as allTags,
 		settings,
 		showSidebar,
 		WEBUI_NAME,
@@ -45,14 +44,9 @@
 
 	import { generateChatCompletion } from '$lib/apis/ollama';
 	import {
-		addTagById,
 		createNewChat,
-		deleteTagById,
-		deleteTagsById,
-		getAllTags,
 		getChatById,
 		getChatList,
-		getTagsById,
 		updateChatById
 	} from '$lib/apis/chats';
 	import { generateOpenAIChatCompletion } from '$lib/apis/openai';
@@ -241,9 +235,6 @@
 					chatTitle.set(data);
 					currentChatPage.set(1);
 					await chats.set(await getChatList(localStorage.token, $currentChatPage));
-				} else if (type === 'chat:tags') {
-					chat = await getChatById(localStorage.token, $chatId);
-					allTags.set(await getAllTags(localStorage.token));
 				} else if (type === 'message') {
 					message.content += data.content;
 				} else if (type === 'replace') {
@@ -503,9 +494,6 @@
 		});
 
 		if (chat) {
-			tags = await getTagsById(localStorage.token, $chatId).catch(async (error) => {
-				return [];
-			});
 
 			const chatContent = chat.chat;
 
@@ -1232,7 +1220,6 @@
 					? {
 							background_tasks: {
 								title_generation: $settings?.title?.auto ?? true,
-								tags_generation: $settings?.autoTags ?? true
 							}
 						}
 					: {}),

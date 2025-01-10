@@ -12,7 +12,6 @@
 
 
 	import { getModels, getVersionUpdates } from '$lib/apis';
-	import { getAllTags } from '$lib/apis/chats';
 	import { getBanners } from '$lib/apis/configs';
 	import { getUserSettings } from '$lib/apis/users';
 
@@ -24,7 +23,6 @@
 		user,
 		settings,
 		models,
-		tags,
 		banners,
 		showSettings,
 		temporaryChatEnabled

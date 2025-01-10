@@ -9,7 +9,6 @@
 		settings,
 		showSettings,
 		chatId,
-		tags,
 		showSidebar,
 		mobile,
 		showArchivedChats,
@@ -27,7 +26,6 @@
 	import {
 		deleteChatById,
 		getChatList,
-		getAllTags,
 		getChatListBySearchText,
 		createNewChat,
 		getPinnedChatList,
@@ -148,7 +146,6 @@
 
 	const initChatList = async () => {
 		// Reset pagination variables
-		tags.set(await getAllTags(localStorage.token));
 		pinnedChats.set(await getPinnedChatList(localStorage.token));
 		initFolders();
 
@@ -204,9 +201,6 @@
 				currentChatPage.set(1);
 				await chats.set(await getChatListBySearchText(localStorage.token, search));
 
-				if ($chats.length === 0) {
-					tags.set(await getAllTags(localStorage.token));
-				}
 			}, 1000);
 		}
 	};

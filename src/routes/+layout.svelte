@@ -20,7 +20,6 @@
 		chatId,
 		chats,
 		currentChatPage,
-		tags,
 		temporaryChatEnabled,
 		isLastActiveTab
 	} from '$lib/stores';
@@ -39,7 +38,7 @@
 	import { WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import i18n, { initI18n, getLanguages } from '$lib/i18n';
 	import { bestMatchingLanguage } from '$lib/utils';
-	import { getAllTags, getChatList } from '$lib/apis/chats';
+	import { getChatList } from '$lib/apis/chats';
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 
 	setContext('i18n', i18n);
@@ -136,8 +135,6 @@
 			} else if (type === 'chat:title') {
 				currentChatPage.set(1);
 				await chats.set(await getChatList(localStorage.token, $currentChatPage));
-			} else if (type === 'chat:tags') {
-				tags.set(await getAllTags(localStorage.token));
 			}
 		}
 	};
