@@ -44,6 +44,7 @@
     - Removed Functions[^3]
     - [Removed Playground](https://github.com/notguoxin/custom-webui/commit/0c2a884520447e5ef6f46d668184a836c2ca0380)
     - Removed Pipelines[^3]
+    - [Removed Some of Advanced Params](https://github.com/notguoxin/custom-webui/commit/)
     - and more!
 
 ## License 📜
