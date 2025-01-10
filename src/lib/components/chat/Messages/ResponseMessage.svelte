@@ -34,7 +34,6 @@
 	import type { i18n as i18nType } from 'i18next';
 	import ContentRenderer from './ContentRenderer.svelte';
 	import { getChatById } from '../../../../lib/apis/chats';
-	import { generateTags } from '../../../../lib/apis';
 
 	interface MessageType {
 		id: string;
@@ -257,26 +256,6 @@
 		saveMessage(message.id, updatedMessage);
 
 		await tick();
-
-		if (!details) {
-			if (!updatedMessage.annotation?.tags) {
-				// attempt to generate tags
-				const tags = await generateTags(localStorage.token, message.model, messages, chatId).catch(
-					(error) => {
-						console.error(error);
-						return [];
-					}
-				);
-				console.log(tags);
-
-				if (tags) {
-					updatedMessage.annotation.tags = tags;
-					feedbackItem.data.tags = tags;
-
-					saveMessage(message.id, updatedMessage);
-				}
-			}
-		}
 
 		feedbackLoading = false;
 	};

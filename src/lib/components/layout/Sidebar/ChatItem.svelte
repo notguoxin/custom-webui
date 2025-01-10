@@ -10,10 +10,8 @@
 		archiveChatById,
 		cloneChatById,
 		deleteChatById,
-		getAllTags,
 		getChatById,
 		getChatList,
-		getChatListByTagName,
 		getPinnedChatList,
 		updateChatById
 	} from '$lib/apis/chats';
@@ -25,7 +23,6 @@
 		pinnedChats,
 		showSidebar,
 		currentChatPage,
-		tags
 	} from '$lib/stores';
 
 	import ChatMenu from './ChatMenu.svelte';
@@ -106,14 +103,6 @@
 		});
 
 		if (res) {
-			tags.set(await getAllTags(localStorage.token));
-			if ($chatId === id) {
-				await goto('/');
-
-				await chatId.set('');
-				await tick();
-			}
-
 			dispatch('change');
 		}
 	};
@@ -368,9 +357,6 @@
 					}}
 					on:change={async () => {
 						dispatch('change');
-					}}
-					on:tag={(e) => {
-						dispatch('tag', e.detail);
 					}}
 				>
 					<button

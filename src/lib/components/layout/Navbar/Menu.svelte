@@ -19,7 +19,6 @@
 	import { flyAndScale } from '$lib/utils/transitions';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';
-	import Tags from '$lib/components/chat/Tags.svelte';
 	import Map from '$lib/components/icons/Map.svelte';
 	import Clipboard from '$lib/components/icons/Clipboard.svelte';
 	import AdjustmentsHorizontal from '$lib/components/icons/AdjustmentsHorizontal.svelte';
@@ -253,14 +252,6 @@
 				<Clipboard className=" size-4" strokeWidth="1.5" />
 				<div class="flex items-center">{$i18n.t('Copy')}</div>
 			</DropdownMenu.Item>
-
-			{#if !$temporaryChatEnabled}
-				<hr class="border-gray-50 dark:border-gray-850 my-0.5" />
-
-				<div class="flex p-1">
-					<Tags chatId={chat.id} />
-				</div>
-			{/if}
 		</DropdownMenu.Content>
 	</div>
 </Dropdown>

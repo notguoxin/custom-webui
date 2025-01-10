@@ -3,7 +3,6 @@
 	import { models, user } from '$lib/stores';
 
 	import AdvancedParams from '$lib/components/chat/Settings/Advanced/AdvancedParams.svelte';
-	import Tags from '$lib/components/common/Tags.svelte';
 	import Capabilities from '$lib/components/workspace/Models/Capabilities.svelte';
 	import Textarea from '$lib/components/common/Textarea.svelte';
 	import AccessControl from '../common/AccessControl.svelte';
@@ -400,26 +399,6 @@
 							</div>
 						</div>
 					{/if}
-
-					<div class="my-1">
-						<div class="">
-							<Tags
-								tags={info?.meta?.tags ?? []}
-								on:delete={(e) => {
-									const tagName = e.detail;
-									info.meta.tags = info.meta.tags.filter((tag) => tag.name !== tagName);
-								}}
-								on:add={(e) => {
-									const tagName = e.detail;
-									if (!(info?.meta?.tags ?? null)) {
-										info.meta.tags = [{ name: tagName }];
-									} else {
-										info.meta.tags = [...info.meta.tags, { name: tagName }];
-									}
-								}}
-							/>
-						</div>
-					</div>
 
 					<div class="my-2">
 						<div class="px-3 py-2 bg-gray-50 dark:bg-gray-950 rounded-lg">

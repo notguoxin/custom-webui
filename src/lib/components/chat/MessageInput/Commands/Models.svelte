@@ -28,7 +28,7 @@
 				return _item;
 			}),
 		{
-			keys: ['value', 'tags', 'modelName'],
+			keys: ['value', 'modelName'],
 			threshold: 0.3
 		}
 	);
