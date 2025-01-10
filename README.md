@@ -46,6 +46,7 @@
     - Removed Pipelines[^3]
     - [Removed Some of Advanced Params](https://github.com/notguoxin/custom-webui/commit/8458da49f2e680bb512012b431fd83dfbfe0dd30)
     - [Removed prompt suggestions from ModelEditor](https://github.com/notguoxin/custom-webui/pull/26/commits/7c325e2d76459a36798447a4f779e134b08032df)
+    - [Removed Tags from the frontend](https://github.com/notguoxin/custom-webui/pull/26/commits/e9594447a635411dc1a19a81530a1bdc44c87621)
     - and more!
 
 ## License 📜
