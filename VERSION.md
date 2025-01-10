@@ -16,4 +16,4 @@
 | V0.1.96 | :x:                |
 | V0.1.95 | :white_check_mark: |
 
-[^1]: (does not unclude bugs, check [README](README.md) for more info)
+[^1]: (does not include bugs, check [README](README.md) for more info)
