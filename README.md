@@ -21,8 +21,9 @@
 # What's removed/modified/added?
 - Repository:
     - [Removed Docker build](https://github.com/notguoxin/custom-webui/commit/0579a275b904897ff5642c3a1e5c7dc642e9b5d6)
-    - [pypi build](https://github.com/notguoxin/custom-webui/commit/9c6dd2f057d00f4a4a4e8ffaae5fc73430946a29) [^2]
-    - [frontend and backend build and formating](https://github.com/notguoxin/custom-webui/commit/c0afcda2c4c2f3ade5fb608a6cb2aca97d7cf28a)
+    - [Removed Docker build](https://github.com/notguoxin/custom-webui/commit/0579a275b904897ff5642c3a1e5c7dc642e9b5d6)
+    - [Removed pypi build](https://github.com/notguoxin/custom-webui/commit/9c6dd2f057d00f4a4a4e8ffaae5fc73430946a29) [^2]
+    - [Removed frontend and backend build and formating](https://github.com/notguoxin/custom-webui/commit/c0afcda2c4c2f3ade5fb608a6cb2aca97d7cf28a)
     - Modified realease github action
     - and more!
 - Test/Debug:
