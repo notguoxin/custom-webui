@@ -44,20 +44,8 @@
 
 	let filteredModels = [];
 	let selectedModel = null;
-	let sortedModels = []
+
 	let showModelDeleteConfirm = false;
-
-	$: if (models) {
-		filteredModels = models.filter(
-			(m) => searchValue === '' || m.name.toLowerCase().includes(searchValue.toLowerCase())
-		);
-	}
-
-	$: sortedModels = filteredModels.slice().sort((a, b) => {
-        // Sort by `is_active`: active (true) models first, then inactive (false) models
-        return b.is_active - a.is_active;
-    });
-
 
 	$: if (models) {
 		filteredModels = models.filter(
@@ -222,7 +210,7 @@
 	</div>
 
 	<div class=" my-2 mb-5 gap-2 grid lg:grid-cols-2 xl:grid-cols-3" id="model-list">
-		{#each sortedModels as model}
+		{#each filteredModels as model}
 			<div
 				class=" flex flex-col cursor-pointer w-full px-3 py-2 dark:hover:bg-white/5 hover:bg-black/5 rounded-xl transition"
 				id="model-item-{model.id}"
@@ -353,8 +341,8 @@
 									<Switch
 										bind:state={model.is_active}
 										on:change={async (e) => {
-											toggleModelById(localStorage.token, model.id);
-											_models.set(await getModels(localStorage.token));
+											await toggleModelById(localStorage.token, model.id);
+											await _models.set(await getModels(localStorage.token));
 										}}
 									/>
 								</Tooltip>
@@ -456,33 +444,6 @@
 					</div>
 				</button>
 			</div>
-		</div>
-	{/if}
-
-	{#if $config?.features.enable_community_sharing}
-		<div class=" my-16">
-			<div class=" text-xl font-medium mb-1 line-clamp-1">
-				{$i18n.t('Made by OpenWebUI Community')}
-			</div>
-
-			<a
-				class=" flex cursor-pointer items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-850 w-full mb-2 px-3.5 py-1.5 rounded-xl transition"
-				href="https://openwebui.com/#open-webui-community"
-				target="_blank"
-			>
-				<div class=" self-center">
-					<div class=" font-semibold line-clamp-1">{$i18n.t('Discover a model')}</div>
-					<div class=" text-sm line-clamp-1">
-						{$i18n.t('Discover, download, and explore model presets')}
-					</div>
-				</div>
-
-				<div>
-					<div>
-						<ChevronRight />
-					</div>
-				</div>
-			</a>
 		</div>
 	{/if}
 {:else}
