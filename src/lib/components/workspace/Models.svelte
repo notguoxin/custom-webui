@@ -59,6 +59,12 @@
     });
 
 
+	$: if (models) {
+		filteredModels = models.filter(
+			(m) => searchValue === '' || m.name.toLowerCase().includes(searchValue.toLowerCase())
+		);
+	}
+
 	let searchValue = '';
 
 	const deleteModelHandler = async (model) => {
@@ -215,31 +221,40 @@
 		</div>
 	</div>
 
-	<div class="my-2 mb-5 gap-2 grid lg:grid-cols-2 xl:grid-cols-3" id="model-list">
+	<div class=" my-2 mb-5 gap-2 grid lg:grid-cols-2 xl:grid-cols-3" id="model-list">
 		{#each sortedModels as model}
 			<div
-				class="flex flex-col cursor-pointer w-full px-3 py-2 dark:hover:bg-white/5 hover:bg-black/5 rounded-xl transition"
+				class=" flex flex-col cursor-pointer w-full px-3 py-2 dark:hover:bg-white/5 hover:bg-black/5 rounded-xl transition"
 				id="model-item-{model.id}"
 			>
 				<div class="flex gap-4 mt-0.5 mb-0.5">
-					<div class="w-[44px]">
+					<div class=" w-[44px]">
 						<div
-							class="rounded-full object-cover {model.is_active
+							class=" rounded-full object-cover {model.is_active
 								? ''
-								: 'opacity-50 dark:opacity-50'}"
+								: 'opacity-50 dark:opacity-50'} "
 						>
 							<img
 								src={model?.meta?.profile_image_url ?? '/static/favicon.png'}
 								alt="modelfile profile"
-								class="rounded-full w-full h-auto object-cover"
+								class=" rounded-full w-full h-auto object-cover"
 							/>
 						</div>
 					</div>
-					<a class="flex flex-1 cursor-pointer w-full" href={`/?models=${encodeURIComponent(model.id)}`}>
-						<div class="flex-1 self-center {model.is_active ? '' : 'text-gray-500'}">
-							<Tooltip content={marked.parse(model?.meta?.description ?? model.id)} className="w-fit" placement="top-start">
-								<div class="font-semibold line-clamp-1">{model.name}</div>
+
+					<a
+						class=" flex flex-1 cursor-pointer w-full"
+						href={`/?models=${encodeURIComponent(model.id)}`}
+					>
+						<div class=" flex-1 self-center {model.is_active ? '' : 'text-gray-500'}">
+							<Tooltip
+								content={marked.parse(model?.meta?.description ?? model.id)}
+								className=" w-fit"
+								placement="top-start"
+							>
+								<div class=" font-semibold line-clamp-1">{model.name}</div>
 							</Tooltip>
+
 							<div class="flex gap-1 text-xs overflow-hidden">
 								<div class="line-clamp-1">
 									{#if (model?.meta?.description ?? '').trim()}
@@ -252,9 +267,14 @@
 						</div>
 					</a>
 				</div>
+
 				<div class="flex justify-between items-center -mb-0.5 px-0.5">
-					<div class="text-xs mt-0.5">
-						<Tooltip content={model?.user?.email ?? $i18n.t('Deleted User')} className="flex shrink-0" placement="top-start">
+					<div class=" text-xs mt-0.5">
+						<Tooltip
+							content={model?.user?.email ?? $i18n.t('Deleted User')}
+							className="flex shrink-0"
+							placement="top-start"
+						>
 							<div class="shrink-0 text-gray-500">
 								{$i18n.t('By {{name}}', {
 									name: capitalizeFirstLetter(
@@ -264,29 +284,82 @@
 							</div>
 						</Tooltip>
 					</div>
+
 					<div class="flex flex-row gap-0.5 items-center">
-						{#if $user?.role === 'admin' || model.user_id === $user?.id}
-							<a
-								class="self-center w-fit text-sm px-2 py-2 dark:text-gray-300 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl"
-								type="button"
-								href={`/workspace/models/edit?id=${encodeURIComponent(model.id)}`}
-							>
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-									<path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
-								</svg>
-							</a>
-						{/if}
-						<div class="ml-1">
-							<Tooltip content={model.is_active ? $i18n.t('Enabled') : $i18n.t('Disabled')}>
-								<Switch
-									bind:state={model.is_active}
-									on:change={async (e) => {
-										toggleModelById(localStorage.token, model.id);
-										_models.set(await getModels(localStorage.token));
+						{#if shiftKey}
+							<Tooltip content={$i18n.t('Delete')}>
+								<button
+									class="self-center w-fit text-sm px-2 py-2 dark:text-gray-300 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl"
+									type="button"
+									on:click={() => {
+										deleteModelHandler(model);
 									}}
-								/>
+								>
+									<GarbageBin />
+								</button>
 							</Tooltip>
-						</div>
+						{:else}
+							{#if $user?.role === 'admin' || model.user_id === $user?.id}
+								<a
+									class="self-center w-fit text-sm px-2 py-2 dark:text-gray-300 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl"
+									type="button"
+									href={`/workspace/models/edit?id=${encodeURIComponent(model.id)}`}
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="w-4 h-4"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+										/>
+									</svg>
+								</a>
+							{/if}
+
+							<ModelMenu
+								user={$user}
+								{model}
+								cloneHandler={() => {
+									cloneModelHandler(model);
+								}}
+								exportHandler={() => {
+									exportModelHandler(model);
+								}}
+								hideHandler={() => {
+									hideModelHandler(model);
+								}}
+								deleteHandler={() => {
+									selectedModel = model;
+									showModelDeleteConfirm = true;
+								}}
+								onClose={() => {}}
+							>
+								<button
+									class="self-center w-fit text-sm p-1.5 dark:text-gray-300 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl"
+									type="button"
+								>
+									<EllipsisHorizontal className="size-5" />
+								</button>
+							</ModelMenu>
+
+							<div class="ml-1">
+								<Tooltip content={model.is_active ? $i18n.t('Enabled') : $i18n.t('Disabled')}>
+									<Switch
+										bind:state={model.is_active}
+										on:change={async (e) => {
+											toggleModelById(localStorage.token, model.id);
+											_models.set(await getModels(localStorage.token));
+										}}
+									/>
+								</Tooltip>
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -383,6 +456,33 @@
 					</div>
 				</button>
 			</div>
+		</div>
+	{/if}
+
+	{#if $config?.features.enable_community_sharing}
+		<div class=" my-16">
+			<div class=" text-xl font-medium mb-1 line-clamp-1">
+				{$i18n.t('Made by OpenWebUI Community')}
+			</div>
+
+			<a
+				class=" flex cursor-pointer items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-850 w-full mb-2 px-3.5 py-1.5 rounded-xl transition"
+				href="https://openwebui.com/#open-webui-community"
+				target="_blank"
+			>
+				<div class=" self-center">
+					<div class=" font-semibold line-clamp-1">{$i18n.t('Discover a model')}</div>
+					<div class=" text-sm line-clamp-1">
+						{$i18n.t('Discover, download, and explore model presets')}
+					</div>
+				</div>
+
+				<div>
+					<div>
+						<ChevronRight />
+					</div>
+				</div>
+			</a>
 		</div>
 	{/if}
 {:else}
