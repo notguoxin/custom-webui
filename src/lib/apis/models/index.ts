@@ -128,7 +128,7 @@ export const getModelById = async (token: string, id: string) => {
 
 export const toggleModelById = async (token: string, id: string) => {
 	let error = null;
-
+	console.log(`called: ${WEBUI_API_BASE_URL}`)
 	const searchParams = new URLSearchParams();
 	searchParams.append('id', id);
 

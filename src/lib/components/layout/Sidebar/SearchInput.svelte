@@ -21,7 +21,6 @@
 			if (e.target.id.startsWith('search-tag-') || e.target.id.startsWith('search-option-')) {
 				return;
 			}
-			focused = false;
 		}
 	};
 
@@ -57,9 +56,6 @@
 			bind:value
 			on:input={() => {
 				dispatch('input');
-			}}
-			on:focus={() => {
-				focused = true;
 			}}
 			on:keydown={(e) => {
 				if (e.key === 'ArrowUp') {
