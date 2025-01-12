@@ -283,7 +283,6 @@
 									on:change={async (e) => {
 										toggleModelById(localStorage.token, model.id);
 										_models.set(await getModels(localStorage.token));
-										location.reload()
 									}}
 								/>
 							</Tooltip>
