@@ -11,6 +11,8 @@
 # Versions
 | Version | Working            |
 | ------- | ------------------ |
+| V0.2.00 | :white_check_mark: |
+| V0.1.99 | :white_check_mark: |
 | V0.1.98 | :white_check_mark: |
 | V0.1.97 | :x:                |
 | V0.1.96 | :x:                |
